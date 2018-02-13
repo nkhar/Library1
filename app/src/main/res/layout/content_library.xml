@@ -9,6 +9,7 @@
     tools:showIn="@layout/app_bar_library">
 
     <TextView
+        android:id="@+id/textview_display_database_tables"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
