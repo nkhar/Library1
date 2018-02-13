@@ -202,6 +202,7 @@ public class LibraryActivity extends AppCompatActivity
                 }
             }
 
+            Log.i(LOG_TAG, "authorDao has table " +  authorDao.getTableName());
 
             tv.setText(sb.toString());
             Log.i(LOG_TAG, "Done with authors at " + System.currentTimeMillis());
