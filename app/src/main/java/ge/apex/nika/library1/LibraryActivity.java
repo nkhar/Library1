@@ -3,6 +3,8 @@ package ge.apex.nika.library1;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,6 +25,9 @@ import java.util.List;
 import java.util.Random;
 
 import ge.apex.nika.library1.Data.Author;
+import ge.apex.nika.library1.Fragments.AuthorFragment;
+import ge.apex.nika.library1.Fragments.BookFragment;
+import ge.apex.nika.library1.Fragments.GenreFragment;
 
 public class LibraryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,11 +113,24 @@ public class LibraryActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_authors) {
-            // Handle the authors action
-            doSampleAuthorStuff("AuthorStuff",mTextView);
+            //doSampleAuthorStuff("AuthorStuff",mTextView);
+
+            // Insert the fragment by replacing FrameLayout.
+            AuthorFragment authorFragment = new AuthorFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, authorFragment).commit();
+
         } else if (id == R.id.nav_books) {
+            // Insert the fragment by replacing FrameLayout.
+            BookFragment bookFragment = new BookFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment).commit();
 
         } else if (id == R.id.nav_genres) {
+            // Insert the fragment by replacing FrameLayout.
+            GenreFragment genreFragment = new GenreFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment).commit();
 
         } else if (id == R.id.nav_share) {
 
@@ -120,10 +138,16 @@ public class LibraryActivity extends AppCompatActivity
 
         }
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setTitle(item.getTitle());
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * getDatabaseHelper returns instance of DatabaseHelper class
+     */
 
     public DatabaseHelper getDatabaseHelper() {
         if(databaseHelper == null ) {
@@ -132,10 +156,13 @@ public class LibraryActivity extends AppCompatActivity
         return databaseHelper;
     }
 
+    /**
+     * Activity lifecycle method called when it is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /**
+        /*
          *  You'll need this in your class to release the helper when done.
 		 */
         if(databaseHelper != null ) {
