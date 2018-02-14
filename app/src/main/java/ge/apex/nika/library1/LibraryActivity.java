@@ -28,9 +28,10 @@ import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.Fragments.AuthorFragment;
 import ge.apex.nika.library1.Fragments.BookFragment;
 import ge.apex.nika.library1.Fragments.GenreFragment;
+import ge.apex.nika.library1.Fragments.dummy.DummyContent;
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener, BookFragment.OnListFragmentInteractionListener, GenreFragment.OnListFragmentInteractionListener {
 
     // Widgets
     TextView mTextView;
@@ -112,25 +113,25 @@ public class LibraryActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        // get support fragment manager.
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         if (id == R.id.nav_authors) {
             //doSampleAuthorStuff("AuthorStuff",mTextView);
 
             // Insert the fragment by replacing FrameLayout.
             AuthorFragment authorFragment = new AuthorFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, authorFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, authorFragment, "AUTHORTAG").commit();
 
         } else if (id == R.id.nav_books) {
             // Insert the fragment by replacing FrameLayout.
             BookFragment bookFragment = new BookFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment, "BOOKTAG").commit();
 
         } else if (id == R.id.nav_genres) {
             // Insert the fragment by replacing FrameLayout.
             GenreFragment genreFragment = new GenreFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
 
         } else if (id == R.id.nav_share) {
 
@@ -236,6 +237,11 @@ public class LibraryActivity extends AppCompatActivity
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
     }
 }
