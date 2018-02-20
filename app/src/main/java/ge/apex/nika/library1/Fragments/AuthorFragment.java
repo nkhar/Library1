@@ -32,6 +32,7 @@ public class AuthorFragment extends Fragment {
 
     protected final String LOG_TAG = "AuthorFragment";
 
+
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
@@ -60,7 +61,16 @@ public class AuthorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        /*
+        *
+        *
+        *
+         */
         doAuthorStuff();
+        /*
+        *
+        *
+         */
         View view = inflater.inflate(R.layout.fragment_author_list, container, false);
 
         // Set the adapter
@@ -144,6 +154,7 @@ public class AuthorFragment extends Fragment {
                 authorC++;
             }*/
 
+           /*
             Author author = new Author("Jack", "London", 1876);
             // store it in the database
             authorDao.create(author);
@@ -154,6 +165,7 @@ public class AuthorFragment extends Fragment {
             author = new Author("Charles", "Dickens", 1812);
             // store it in the database
             authorDao.create(author);
+            */
 
         } catch (SQLException e) {
             e.printStackTrace();

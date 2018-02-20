@@ -1,5 +1,6 @@
 package ge.apex.nika.library1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,8 @@ public class LibraryActivity extends AppCompatActivity
 
     protected final String LOG_TAG = "LibraryActivity";
     protected final static int MAX_NUM_TO_CREATE = 8;
+
+    public static final String EXTRA_MESSAGE = "ge.apex.nika.library1.MESSAGE";
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
@@ -242,5 +245,9 @@ public class LibraryActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Author author) {
 
+        Intent intent = new Intent(this, AuthorDetailActivity.class);
+        String message = author.getFName();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 }
