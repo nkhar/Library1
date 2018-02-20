@@ -26,12 +26,10 @@ import java.util.Random;
 
 import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.Fragments.AuthorFragment;
-import ge.apex.nika.library1.Fragments.BookFragment;
-import ge.apex.nika.library1.Fragments.GenreFragment;
-import ge.apex.nika.library1.Fragments.dummy.DummyContent;
+
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener, BookFragment.OnListFragmentInteractionListener, GenreFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener{
 
     // Widgets
     TextView mTextView;
@@ -39,12 +37,12 @@ public class LibraryActivity extends AppCompatActivity
     protected final String LOG_TAG = "LibraryActivity";
     protected final static int MAX_NUM_TO_CREATE = 8;
 
-    // Reference of DatabaseHelper class to access its DAOs and other componentspushing a
+    // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
 
     // Declaration of DAO to interact with corresponding Author table
-    protected Dao<Author, Integer> authorDao;
-    List<Author> authorList = null;
+   // protected Dao<Author, Integer> authorDao;
+   // List<Author> authorList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +123,13 @@ public class LibraryActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_books) {
             // Insert the fragment by replacing FrameLayout.
-            BookFragment bookFragment = new BookFragment();
-            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment, "BOOKTAG").commit();
+           // BookFragment bookFragment = new BookFragment();
+           // fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment, "BOOKTAG").commit();
 
         } else if (id == R.id.nav_genres) {
             // Insert the fragment by replacing FrameLayout.
-            GenreFragment genreFragment = new GenreFragment();
-            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
+           // GenreFragment genreFragment = new GenreFragment();
+           // fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
 
         } else if (id == R.id.nav_share) {
 
@@ -175,7 +173,7 @@ public class LibraryActivity extends AppCompatActivity
     /**
      * Do sample author stuff
      */
-    protected void doSampleAuthorStuff(String action, TextView tv) {
+  /*  protected void doSampleAuthorStuff(String action, TextView tv) {
 
         try {
 
@@ -239,9 +237,10 @@ public class LibraryActivity extends AppCompatActivity
         }
 
     }
+    */
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Author author) {
 
     }
 }

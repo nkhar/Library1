@@ -1,29 +1,33 @@
 package ge.apex.nika.library1.Fragments;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.Fragments.AuthorFragment.OnListFragmentInteractionListener;
-import ge.apex.nika.library1.Fragments.dummy.DummyContent.DummyItem;
+
 import ge.apex.nika.library1.R;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Author} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Author> mAuthorValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyAuthorRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+    protected final String LOG_TAG = "MyAuthorRecyclerAdapter";
+
+    public MyAuthorRecyclerViewAdapter(List<Author> items, OnListFragmentInteractionListener listener) {
+        mAuthorValues = items;
         mListener = listener;
     }
 
@@ -36,9 +40,11 @@ public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mAuthor = mAuthorValues.get(position);
+        holder.mIdView.setText(mAuthorValues.get(position).getId() + "");
+        holder.mFName.setText(mAuthorValues.get(position).getFName());
+        holder.mLName.setText(mAuthorValues.get(position).getLName());
+        holder.mDateBorn.setText(mAuthorValues.get(position).getDateBorn() + "");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +52,7 @@ public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.mAuthor);
                 }
             }
         });
@@ -54,25 +60,30 @@ public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRe
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        Log.d(LOG_TAG, "size is: " + mAuthorValues.size());
+        return mAuthorValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mFName;
+        public final TextView mLName;
+        public final TextView mDateBorn;
+        public Author mAuthor;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.author_id);
+            mFName = (TextView) view.findViewById(R.id.author_FName);
+            mLName = (TextView) view.findViewById(R.id.author_LName);
+            mDateBorn = (TextView) view.findViewById(R.id.author_DateBorn);
         }
 
-        @Override
+      @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return  " " + mFName.getText() + "'";
         }
     }
 }
