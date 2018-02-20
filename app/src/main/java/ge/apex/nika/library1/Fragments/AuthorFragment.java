@@ -154,7 +154,7 @@ public class AuthorFragment extends Fragment {
                 authorC++;
             }*/
 
-           /*
+          /*
             Author author = new Author("Jack", "London", 1876);
             // store it in the database
             authorDao.create(author);

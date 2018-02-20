@@ -14,9 +14,9 @@ public class Book {
     private int bookId;
     @DatabaseField
     private String title;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh=true)
     private Author authorId;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh=true)
     private Genre genreId;
     @DatabaseField
     private int date;

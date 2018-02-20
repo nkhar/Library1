@@ -152,17 +152,16 @@ public class AuthorDetailActivity extends AppCompatActivity{
             // store it in the database
             genreDao.create(genre);
             sb.append(" " + genre.toString() + " \n");
-
-
-
             */
-            sb.append("+++++++++++++++++++++++++++++++");
+
+
+            sb.append("+++++++++++++++++++++++++++++++\n\n");
             for(Book tempBook : bookList) {
                 sb.append(tempBook.toString() + " \n\n");
             }
             sb.append("+++++++++++++++++++++++++++++++ \n\n");
 
-            Author author = authorDao.queryForId(1);
+           Author author = authorDao.queryForId(1);
             sb.append(author);
 
             tv.setText(sb.toString());
