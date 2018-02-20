@@ -33,7 +33,7 @@ public class LibraryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener{
 
     // Widgets
-    TextView mTextView;
+   // TextView mTextView;
 
     protected final String LOG_TAG = "LibraryActivity";
     protected final static int MAX_NUM_TO_CREATE = 8;
@@ -73,7 +73,7 @@ public class LibraryActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // my code
-        mTextView = (TextView) findViewById(R.id.textview_display_database_tables);
+       // mTextView = (TextView) findViewById(R.id.textview_display_database_tables);
     }
 
     @Override

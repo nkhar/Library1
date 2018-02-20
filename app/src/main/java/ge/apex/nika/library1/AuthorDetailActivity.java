@@ -158,9 +158,12 @@ public class AuthorDetailActivity extends AppCompatActivity{
             */
             sb.append("+++++++++++++++++++++++++++++++");
             for(Book tempBook : bookList) {
-                sb.append(tempBook.toString());
+                sb.append(tempBook.toString() + " \n\n");
             }
-            sb.append("+++++++++++++++++++++++++++++++");
+            sb.append("+++++++++++++++++++++++++++++++ \n\n");
+
+            Author author = authorDao.queryForId(1);
+            sb.append(author);
 
             tv.setText(sb.toString());
 
