@@ -14,10 +14,10 @@ public class Book {
     private int bookId;
     @DatabaseField
     private String title;
-    @DatabaseField
-    private int authorId;
-    @DatabaseField
-    private int genreId;
+    @DatabaseField(foreign = true)
+    private Author authorId;
+    @DatabaseField(foreign = true)
+    private Genre genreId;
     @DatabaseField
     private int date;
     @DatabaseField
@@ -27,7 +27,7 @@ public class Book {
 
     }
 
-    public Book(String title, int authorId, int genreId, int date, String lang) {
+    public Book(String title, Author authorId, Genre genreId, int date, String lang) {
 
         this.title = title;
         this.authorId = authorId;
@@ -52,19 +52,19 @@ public class Book {
         this.title = title;
     }
 
-    public int getAuthorId() {
+    public Author getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(int authorId) {
+    public void setAuthorId(Author authorId) {
         this.authorId = authorId;
     }
 
-    public int getGenreId() {
+    public Genre getGenreId() {
         return genreId;
     }
 
-    public void setGenreId(int genreId) {
+    public void setGenreId(Genre genreId) {
         this.genreId = genreId;
     }
 
