@@ -26,12 +26,13 @@ import java.util.List;
 import java.util.Random;
 
 import ge.apex.nika.library1.Data.Author;
+import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.Fragments.AuthorFragment;
 import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener, GenreFragment.OnListGenreFragmentInteractionListener{
 
     // Widgets
    // TextView mTextView;
@@ -164,6 +165,14 @@ public class LibraryActivity extends AppCompatActivity
 
         Intent intent = new Intent(this, AuthorDetailActivity.class);
         String message = author.getFName();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListGenreFragmentInteraction(Genre genreItem) {
+        Intent intent = new Intent(this, GenreDetailActivity.class);
+        String message = genreItem.getName();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
