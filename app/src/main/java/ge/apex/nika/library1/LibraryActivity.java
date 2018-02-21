@@ -27,6 +27,7 @@ import java.util.Random;
 
 import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.Fragments.AuthorFragment;
+import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
@@ -54,6 +55,7 @@ public class LibraryActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +64,7 @@ public class LibraryActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -131,8 +134,8 @@ public class LibraryActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_genres) {
             // Insert the fragment by replacing FrameLayout.
-           // GenreFragment genreFragment = new GenreFragment();
-           // fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
+            GenreFragment genreFragment = new GenreFragment();
+            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
 
         } else if (id == R.id.nav_share) {
 
@@ -148,99 +151,13 @@ public class LibraryActivity extends AppCompatActivity
     }
 
     /**
-     * getDatabaseHelper returns instance of DatabaseHelper class
-     */
-
-    public DatabaseHelper getDatabaseHelper() {
-        if(databaseHelper == null ) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
-    /**
      * Activity lifecycle method called when it is destroyed.
      */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*
-         *  You'll need this in your class to release the helper when done.
-		 */
-        if(databaseHelper != null ) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
     }
 
-    /**
-     * Do sample author stuff
-     */
-  /*  protected void doSampleAuthorStuff(String action, TextView tv) {
-
-        try {
-
-            authorDao = getDatabaseHelper().getAuthorDao();
-            //List<SimpleData>
-            authorList = authorDao.queryForAll();
-            Log.d(LOG_TAG, "WE got authorDAO");
-
-            // our string builder for building the content-view
-            StringBuilder sb = new StringBuilder();
-            sb.append("Found ").append(authorList.size()).append(" entries in DB in ").append(action).append("()\n");
-
-            // if we already have items in the database
-            int authorC = 1;
-            for (Author author : authorList) {
-                sb.append('#').append(authorC).append(": ").append(author).append('\n');
-                authorC++;
-            }
-            sb.append("------------------------------------------\n");
-            sb.append("Deleted ids:");
-
-            for (Author author : authorList) {
-                authorDao.delete(author);
-                sb.append(' ').append(author.getId());
-                Log.i(LOG_TAG, "deleting author(" + author.getId() + ")");
-                authorC++;
-            }
-            sb.append('\n');
-            sb.append("------------------------------------------\n");
-
-            int createNum;
-            do {
-                createNum = new Random().nextInt(MAX_NUM_TO_CREATE) + 1;
-            } while (createNum == authorList.size());
-            sb.append("Creating ").append(createNum).append(" new entries:\n");
-            for (int i = 0; i < createNum; i++) {
-                // create a new simple object
-                long millis = System.currentTimeMillis();
-                // SimpleData simple = new SimpleData(millis);
-                Author author = new Author("Jack", "London", 1876);
-                // store it in the database
-                authorDao.create(author);
-
-                Log.i(LOG_TAG, "created author(" + millis + ")");
-                // output it
-                sb.append('#').append(i + 1).append(": ");
-                sb.append(author).append('\n');
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    // ignore
-                }
-            }
-
-            Log.i(LOG_TAG, "authorDao has table " +  authorDao.getTableName());
-
-            tv.setText(sb.toString());
-            Log.i(LOG_TAG, "Done with authors at " + System.currentTimeMillis());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-    */
 
     @Override
     public void onListFragmentInteraction(Author author) {
