@@ -99,7 +99,7 @@ public class GenreFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
         adapter = new MyGenreRecyclerViewAdapter(genreList, mListener);
-        recyclerView.setAdapter(new MyGenreRecyclerViewAdapter(genreList, mListener));
+        recyclerView.setAdapter(adapter);
 
 
 
@@ -125,6 +125,9 @@ public class GenreFragment extends Fragment {
     public void onResume() {
         super.onResume();
         try {
+            /*
+            This does not work
+             */
         genreList = genreDao.queryForAll();
         adapter.notifyDataSetChanged();
 
