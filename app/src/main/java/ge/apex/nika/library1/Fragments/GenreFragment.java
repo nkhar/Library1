@@ -62,12 +62,14 @@ public class GenreFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate method was called");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        Log.d(LOG_TAG, "onCreateView method was called");
 
         /*
         *
@@ -118,18 +120,34 @@ public class GenreFragment extends Fragment {
             }
         });
 
+        Log.d(LOG_TAG, "onCreateView method finished execution");
         return view;
+
     }
 
     @Override
     public void onResume() {
+        Log.d(LOG_TAG, "onResume method was called");
         super.onResume();
         try {
             /*
             This does not work
              */
-        genreList = genreDao.queryForAll();
-        adapter.notifyDataSetChanged();
+            int curSize = adapter.getItemCount();
+            genreList = genreDao.queryForAll();
+
+            Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
+           // adapter.notifyItemRangeInserted(curSize, genreList.size());
+            /*
+            This method caused instance(field) variable mGenreValues in class
+            MyGenreRecyclerViewAdapter to be declared without being final. Therefore
+             there might be another way to change RecyclerView with mGenreValues being final.
+             */
+            adapter.updateList(genreList);
+
+            Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
+
+
 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -193,31 +211,13 @@ public class GenreFragment extends Fragment {
     public void doGenreStuff() {
         try {
 
+
             genreDao = getDatabaseHelper().getGenreDao();
             //List<SimpleData>
             genreList = genreDao.queryForAll();
-            Log.d(LOG_TAG, "WE got authorDAO");
+            Log.d(LOG_TAG, "doGenreStuff queryForAll was called, size of genreList is: " + genreList.size());
+            Log.d(LOG_TAG, "WE got genreDAO");
 
-            // if we already have items in the database
-          /*  int authorC = 1;
-            for (Author author : authorList) {
-                authorDao.delete(author);
-                Log.i(LOG_TAG, "deleting author(" + author.getId() + ")");
-                authorC++;
-            }*/
-
-          /*
-            Author author = new Author("Jack", "London", 1876);
-            // store it in the database
-            authorDao.create(author);
-
-            author = new Author("Mark", "Twain", 1835);
-            // store it in the database
-            authorDao.create(author);
-            author = new Author("Charles", "Dickens", 1812);
-            // store it in the database
-            authorDao.create(author);
-            */
 
         } catch (SQLException e) {
             e.printStackTrace();

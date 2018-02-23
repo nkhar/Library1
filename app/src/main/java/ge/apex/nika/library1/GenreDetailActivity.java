@@ -109,11 +109,13 @@ public class GenreDetailActivity extends AppCompatActivity {
 
             sb.append("+++++++++++++++++++++++++++++++ \n\n");
 
-            if(genreName.equals("awe")) {
+            if(genreName.equals("ROME")) {
                 Genre genre = new Genre(genreName);
                 genreDao.create(genre);
+                genreList = genreDao.queryForAll();
             }
 
+            Log.d(LOG_TAG, "Thr genre list size is: " + genreList.size());
             tv.setText(sb.toString());
 
 

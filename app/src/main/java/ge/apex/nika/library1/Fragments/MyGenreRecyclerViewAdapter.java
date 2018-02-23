@@ -19,7 +19,7 @@ import ge.apex.nika.library1.R;
 
 public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Genre> mGenreValues;
+    private  List<Genre> mGenreValues;
     private final GenreFragment.OnListGenreFragmentInteractionListener mListener;
 
     protected final String LOG_TAG = "MyGenreRecyclerAdapter";
@@ -29,7 +29,15 @@ public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecy
         mListener = listener;
     }
 
-
+    /**
+            This method caused instance(field) variable mGenreValues in class
+            MyGenreRecyclerViewAdapter to be declared without being final. Therefore
+             there might be another way to change RecyclerView.
+             */
+    public void updateList(List<Genre> listData) {
+        mGenreValues = listData;
+        notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
