@@ -1,5 +1,6 @@
 package ge.apex.nika.library1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,6 +46,16 @@ public class GenreDetailActivity extends AppCompatActivity {
         buttonAdd = (Button) findViewById(R.id.genreAddButton);
         editGenreText = (EditText) findViewById(R.id.genreEditText);
         textView= (TextView) findViewById(R.id.genre_add_textview);
+
+
+        /*
+        * Getting intent to retrieve arguments passed by choosing RecyclerView item.
+         */
+        Intent localIntent = getIntent();
+        String localGenreName = localIntent.getStringExtra(LibraryActivity.EXTRA_MESSAGE);
+        editGenreText.setText(localGenreName);
+
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             int counter = 0;
             @Override
@@ -109,7 +120,7 @@ public class GenreDetailActivity extends AppCompatActivity {
 
             sb.append("+++++++++++++++++++++++++++++++ \n\n");
 
-            if(genreName.equals("ROME")) {
+            if(genreName.equals("GRIMM")) {
                 Genre genre = new Genre(genreName);
                 genreDao.create(genre);
                 genreList = genreDao.queryForAll();

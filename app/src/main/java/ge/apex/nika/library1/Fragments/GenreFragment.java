@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,6 +104,10 @@ public class GenreFragment extends Fragment {
         adapter = new MyGenreRecyclerViewAdapter(genreList, mListener);
         recyclerView.setAdapter(adapter);
 
+        RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(localItemDecoration);
+
+
 
 
 
@@ -133,17 +138,16 @@ public class GenreFragment extends Fragment {
             /*
             This does not work
              */
-            int curSize = adapter.getItemCount();
             genreList = genreDao.queryForAll();
 
             Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
-           // adapter.notifyItemRangeInserted(curSize, genreList.size());
             /*
             This method caused instance(field) variable mGenreValues in class
             MyGenreRecyclerViewAdapter to be declared without being final. Therefore
              there might be another way to change RecyclerView with mGenreValues being final.
              */
             adapter.updateList(genreList);
+
 
             Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
 
