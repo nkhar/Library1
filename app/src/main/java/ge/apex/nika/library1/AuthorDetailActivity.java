@@ -61,9 +61,12 @@ public class AuthorDetailActivity extends AppCompatActivity{
 
         // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
-        int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE, 0);
-        TextView textView = (TextView) findViewById(R.id.author_detail_textview);
-        displayAuthorInfo(messageID, textView);
+
+            int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE, 0);
+            if(messageID != 0) {
+                TextView textView = (TextView) findViewById(R.id.author_detail_textview);
+                displayAuthorInfo(messageID, textView);
+            }
 
        // doAllDaoStuff(textView);
 
@@ -114,7 +117,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
             authorDao = getDatabaseHelper().getAuthorDao();
            Log.d(LOG_TAG, "WE got authorDAO");
            Author localTempAuthor=authorDao.queryForId(authorID);
-           tv.setText(localTempAuthor.getId() + "");
+//           tv.setText(localTempAuthor.getId() + "");
            editFirstNameText.setText(localTempAuthor.getFName());
            editLastNameText.setText(localTempAuthor.getLName());
            editDateBornText.setText(localTempAuthor.getDateBorn() + "");

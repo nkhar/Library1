@@ -1,9 +1,7 @@
 package ge.apex.nika.library1.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,11 +15,11 @@ import android.view.ViewGroup;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
-import ge.apex.nika.library1.AuthorDetailActivity;
 import ge.apex.nika.library1.Data.Author;
+import ge.apex.nika.library1.Data.Book;
+import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.DatabaseHelper;
 import ge.apex.nika.library1.R;
-
 
 import java.sql.SQLException;
 import java.util.List;
@@ -29,33 +27,39 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnListBookFragmentInteractionListener}
  * interface.
  */
-public class AuthorFragment extends Fragment {
+public class BookFragment extends Fragment {
 
-    protected final String LOG_TAG = "AuthorFragment";
+    protected final String LOG_TAG = "BookFragment";
 
-
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private OnListFragmentInteractionListener mListener;
+    private OnListBookFragmentInteractionListener mListener;
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
+
+    // Declaration of DAO to interact with corresponding Book table
+    protected Dao<Book, Integer> bookDao;
+    List<Book> bookList = null;
 
     // Declaration of DAO to interact with corresponding Author table
     protected Dao<Author, Integer> authorDao;
     List<Author> authorList = null;
 
-    MyAuthorRecyclerViewAdapter adapter;
+    // Declaration of DAO to interact with corresponding Genre table
+    protected Dao<Genre, Integer> genreDao;
+    List<Genre> genreList = null;
+
+    MyBookRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AuthorFragment() {
+    public BookFragment() {
     }
 
     @Override
@@ -72,49 +76,28 @@ public class AuthorFragment extends Fragment {
         *
         *
          */
-        doAuthorStuff();
+        doBookStuff();
         /*
         *
         *
          */
 
-        View view = inflater.inflate(R.layout.fragment_author_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_book_list, container, false);
 
         // Set the adapter
             Context context = view.getContext();
-
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rvAuthors);
+            RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            adapter = new MyAuthorRecyclerViewAdapter(authorList, mListener);
-            recyclerView.setAdapter(adapter);
+        adapter = new MyBookRecyclerViewAdapter(bookList, mListener);
+        recyclerView.setAdapter(adapter);
 
-            RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
-            recyclerView.addItemDecoration(localItemDecoration);
-
-
-
-
-
-
-
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_author_fragment);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                        */;
-                Intent intent = new Intent(getActivity(), AuthorDetailActivity.class);
-                AuthorFragment.this.startActivity(intent);
-            }
-        });
-
+        RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(localItemDecoration);
 
         return view;
     }
@@ -127,18 +110,18 @@ public class AuthorFragment extends Fragment {
             /*
             This does not work
              */
-            authorList = authorDao.queryForAll();
+            bookList = bookDao.queryForAll();
 
-            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
+            Log.d(LOG_TAG, "onResume size of bookList is: " + bookList.size());
             /*
             This method caused instance(field) variable mAuthorValues in class
             MyAuthorRecyclerViewAdapter to be declared without being final. Therefore
              there might be another way to change RecyclerView with mAuthorValues being final.
              */
-            adapter.updateList(authorList);
+           adapter.updateList(bookList);
 
 
-            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
+            Log.d(LOG_TAG, "onResume size of authorList is: " + bookList.size());
 
 
 
@@ -147,19 +130,16 @@ public class AuthorFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnListBookFragmentInteractionListener) {
+            mListener = (OnListBookFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnListBookFragmentInteractionListener");
         }
     }
-
-
 
     @Override
     public void onDetach() {
@@ -184,11 +164,10 @@ public class AuthorFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnListBookFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Author item);
+        void onListBookFragmentInteraction(Book item);
     }
-
 
     /**
      * getDatabaseHelper returns instance of DatabaseHelper class
@@ -200,39 +179,21 @@ public class AuthorFragment extends Fragment {
         return databaseHelper;
     }
 
-    public void doAuthorStuff() {
+    public void doBookStuff() {
         try {
 
-            authorDao = getDatabaseHelper().getAuthorDao();
+            bookDao = getDatabaseHelper().getBookDao();
             //List<SimpleData>
-            authorList = authorDao.queryForAll();
-            Log.d(LOG_TAG, "WE got authorDAO");
+            bookList = bookDao.queryForAll();
+            Log.d(LOG_TAG, "WE got bookDao");
 
             // if we already have items in the database
-          /*  int authorC = 1;
-            for (Author author : authorList) {
-                authorDao.delete(author);
-                Log.i(LOG_TAG, "deleting author(" + author.getId() + ")");
-                authorC++;
-            }*/
 
-          /*
-            Author author = new Author("Jack", "London", 1876);
-            // store it in the database
-            authorDao.create(author);
 
-            author = new Author("Mark", "Twain", 1835);
-            // store it in the database
-            authorDao.create(author);
-            author = new Author("Charles", "Dickens", 1812);
-            // store it in the database
-            authorDao.create(author);
-            */
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "Done with AuthorFragment at " + System.currentTimeMillis());
+        Log.i(LOG_TAG, "Done with BookFragment at " + System.currentTimeMillis());
     }
-
 }

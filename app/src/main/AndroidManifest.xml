@@ -25,10 +25,14 @@
         <activity
             android:name=".AuthorDetailActivity"
             android:label="@string/title_activity_author_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GenreDetailActivity"
             android:label="@string/title_activity_genre_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BookDetailActivity"
+            android:label="@string/title_activity_book_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
