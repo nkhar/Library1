@@ -41,7 +41,7 @@ public class GenreDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_genre);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.genre_detail_toolbar);
         setSupportActionBar(toolbar);
         buttonAdd = (Button) findViewById(R.id.genreAddButton);
         editGenreText = (EditText) findViewById(R.id.genreEditText);

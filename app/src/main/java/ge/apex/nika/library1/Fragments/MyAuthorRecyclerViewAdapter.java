@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Author> mAuthorValues;
+    private List<Author> mAuthorValues;
     private final OnListFragmentInteractionListener mListener;
 
     protected final String LOG_TAG = "MyAuthorRecyclerAdapter";
@@ -29,6 +29,16 @@ public class MyAuthorRecyclerViewAdapter extends RecyclerView.Adapter<MyAuthorRe
     public MyAuthorRecyclerViewAdapter(List<Author> items, OnListFragmentInteractionListener listener) {
         mAuthorValues = items;
         mListener = listener;
+    }
+
+    /**
+     This method caused instance(field) variable mAuthorValues in class
+     MyAuthorRecyclerViewAdapter to be declared without being final. Therefore
+     there might be another way to change RecyclerView.
+     */
+    public void updateList(List<Author> listData) {
+        mAuthorValues = listData;
+        notifyDataSetChanged();
     }
 
     @Override

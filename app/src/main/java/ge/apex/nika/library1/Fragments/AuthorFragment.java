@@ -3,6 +3,7 @@ package ge.apex.nika.library1.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,8 @@ public class AuthorFragment extends Fragment {
     protected Dao<Author, Integer> authorDao;
     List<Author> authorList = null;
 
+    MyAuthorRecyclerViewAdapter adapter;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -82,8 +85,14 @@ public class AuthorFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyAuthorRecyclerViewAdapter(authorList, mListener));
+
+            adapter = new MyAuthorRecyclerViewAdapter(authorList, mListener);
+            recyclerView.setAdapter(adapter);
+
+            RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(localItemDecoration);
         }
+
         return view;
     }
 
@@ -96,6 +105,34 @@ public class AuthorFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(LOG_TAG, "onResume method was called");
+        super.onResume();
+        try {
+            /*
+            This does not work
+             */
+           authorList = authorDao.queryForAll();
+
+            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
+            /*
+            This method caused instance(field) variable mAuthorValues in class
+            MyAuthorRecyclerViewAdapter to be declared without being final. Therefore
+             there might be another way to change RecyclerView with mAuthorValues being final.
+             */
+            adapter.updateList(authorList);
+
+
+            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

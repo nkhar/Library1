@@ -3,7 +3,11 @@ package ge.apex.nika.library1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -37,16 +41,46 @@ public class AuthorDetailActivity extends AppCompatActivity{
     protected Dao<Genre,Integer> genreDao;
     List<Genre> genreList = null;
 
+    TextView textView;
+    Button buttonAddAuthor;
+    EditText editFirstNameText;
+    EditText editLastNameText;
+    EditText editDateBornText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_author);
-        // Get the Intent that started this activity and extract the string
+        Toolbar toolbar = (Toolbar) findViewById(R.id.author_detail_toolbar);
+        setSupportActionBar(toolbar);
+        buttonAddAuthor = (Button) findViewById(R.id.authorAddButton);
+        editFirstNameText = (EditText) findViewById(R.id.authorFirstNameEditText);
+        editLastNameText = (EditText) findViewById(R.id.authorLastNameEditText);
+        editDateBornText = (EditText) findViewById(R.id.authorDateBornEditText);
+        textView= (TextView) findViewById(R.id.author_detail_textview);
+
+        // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
-        String message = intent.getStringExtra(LibraryActivity.EXTRA_MESSAGE);
+        int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE, 0);
         TextView textView = (TextView) findViewById(R.id.author_detail_textview);
-        textView.setText(message);
-        doAllDaoStuff(textView);
+        displayAuthorInfo(messageID, textView);
+
+       // doAllDaoStuff(textView);
+
+        buttonAddAuthor.setOnClickListener(new View.OnClickListener() {
+            int counter = 0;
+            @Override
+            public void onClick(View view) {
+                addAuthor();
+                counter++;
+                if(counter == 3) {
+                    finish();
+                }
+                //finish();
+            }
+        });
+
+
     }
 
 
@@ -73,104 +107,43 @@ public class AuthorDetailActivity extends AppCompatActivity{
         return databaseHelper;
     }
 
-    public void doAllDaoStuff(TextView tv) {
-        try {
 
+
+    public  void displayAuthorInfo (int authorID, TextView tv) {
+        try {
             authorDao = getDatabaseHelper().getAuthorDao();
-            //List<SimpleData>
-            authorList = authorDao.queryForAll();
+           Log.d(LOG_TAG, "WE got authorDAO");
+           Author localTempAuthor=authorDao.queryForId(authorID);
+           tv.setText(localTempAuthor.getId() + "");
+           editFirstNameText.setText(localTempAuthor.getFName());
+           editLastNameText.setText(localTempAuthor.getLName());
+           editDateBornText.setText(localTempAuthor.getDateBorn() + "");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Log.i(LOG_TAG, "Done with displayAuthorInfo " + System.currentTimeMillis());
+    }
+
+    public void addAuthor() {
+        try {
+            authorDao = getDatabaseHelper().getAuthorDao();
             Log.d(LOG_TAG, "WE got authorDAO");
 
-            genreDao = getDatabaseHelper().getGenreDao();
-            //List<SimpleData>
-            genreList = genreDao.queryForAll();
-            Log.d(LOG_TAG, "WE got genreDao");
-
-            bookDao = getDatabaseHelper().getBookDao();
-            //List<SimpleData>
-            bookList = bookDao.queryForAll();
-            Log.d(LOG_TAG, "WE got bookDao");
-
-            // if we already have items in the database
-          /*  int authorC = 1;
-            for (Author author : authorList) {
-                authorDao.delete(author);
-                Log.i(LOG_TAG, "deleting author(" + author.getId() + ")");
-                authorC++;
+            String fName = editFirstNameText.getText().toString();
+            String lName = editLastNameText.getText().toString();
+            int dBorn = Integer.parseInt(editDateBornText.getText().toString());
+            if(fName.equals("Oscar") && lName.equals("Wilde") && dBorn == 1854) {
+                Author localTempAuthor = new Author(fName, lName, dBorn);
+                authorDao.create(localTempAuthor);
             }
-            */
-
-            StringBuilder sb = new StringBuilder();
-
-           /*
-            Genre genre = new Genre("Adventure");
-            // store it in the database
-            genreDao.create(genre);
-            sb.append(" " + genre.toString() + " \n");
-
-            Author  author = authorDao.queryForId(1);
-
-            Book book = new Book("White Fang", author, genre, 1906, "ENG");
-            bookDao.create(book);
-            book = new Book("The call of the wild", author, genre, 1903, "ENG");
-            bookDao.create(book);
-
-
-
-
-
-
-
-
-
-            genre = new Genre("Detective");
-            // store it in the database
-            genreDao.create(genre);
-            sb.append(" " + genre.toString() + " \n");
-
-            genre = new Genre("Mystery");
-            // store it in the database
-            genreDao.create(genre);
-            sb.append(" " + genre.toString() + " \n");
-
-            author = authorDao.queryForId(2);
-
-            book = new Book("Adventures of Huckleberry Finn", author, genre, 1884, "RUS");
-            bookDao.create(book);
-
-            genre = new Genre("Novel");
-            // store it in the database
-            genreDao.create(genre);
-            sb.append(" " + genre.toString() + " \n");
-
-            author = authorDao.queryForId(3);
-
-            book = new Book("Great Expectations", author, genre, 1884, "RUS");
-            bookDao.create(book);
-
-            genre = new Genre("Horror");
-            // store it in the database
-            genreDao.create(genre);
-            sb.append(" " + genre.toString() + " \n");
-            */
-
-
-            sb.append("+++++++++++++++++++++++++++++++\n\n");
-            for(Book tempBook : bookList) {
-                sb.append(tempBook.toString() + " \n\n");
-            }
-            sb.append("+++++++++++++++++++++++++++++++ \n\n");
-
-           Author author = authorDao.queryForId(1);
-            sb.append(author);
-
-            tv.setText(sb.toString());
 
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "Done with AuthorDetailActivity at " + System.currentTimeMillis());
+        Log.i(LOG_TAG, "Done with addAuthor " + System.currentTimeMillis());
     }
+
 }

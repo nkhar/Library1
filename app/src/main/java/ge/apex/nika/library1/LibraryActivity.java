@@ -164,8 +164,8 @@ public class LibraryActivity extends AppCompatActivity
     public void onListFragmentInteraction(Author author) {
 
         Intent intent = new Intent(this, AuthorDetailActivity.class);
-        String message = author.getFName();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        int messageID = author.getId();
+        intent.putExtra(EXTRA_MESSAGE, messageID);
         startActivity(intent);
     }
 
