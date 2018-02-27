@@ -134,7 +134,7 @@ public class GenreDetailActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "Done with AuthorDetailActivity at " + System.currentTimeMillis());
+        Log.i(LOG_TAG, "Done with GenreDetailActivity at " + System.currentTimeMillis());
     }
 
 }
