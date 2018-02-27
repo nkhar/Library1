@@ -86,7 +86,7 @@ public class BookFragment extends Fragment {
 
         // Set the adapter
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView recyclerView = view.findViewById(R.id.rvBooks);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -165,7 +165,7 @@ public class BookFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListBookFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onListBookFragmentInteraction(Book item);
     }
 
