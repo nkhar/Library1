@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ge.apex.nika.library1.Data.Book;
 import ge.apex.nika.library1.R;
@@ -19,7 +20,7 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
     private  List<Book> mBookValues;
     private final BookFragment.OnListBookFragmentInteractionListener mListener;
 
-    protected final String LOG_TAG = "MyGenreRecyclerAdapter";
+    protected final String LOG_TAG = "MyBookRecyclerAdapter";
 
     public MyBookRecyclerViewAdapter(List<Book> items, BookFragment.OnListBookFragmentInteractionListener listener) {
         mBookValues = items;
@@ -50,7 +51,7 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         holder.mBook = mBookValues.get(position);
         holder.mBookIdTextView.setText(mBookValues.get(position).getBookId() + "");
@@ -70,6 +71,21 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
                     mListener.onListBookFragmentInteraction(holder.mBook);
                 }
             }
+        });
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Toast.makeText(v.getContext(), "This is a long click", Toast.LENGTH_LONG).show();
+                int position = mBookValues.indexOf(holder.mBook);
+               mBookValues.remove(position);
+               notifyItemRemoved(position);
+
+                return true;
+            }
+
+
         });
 
     }

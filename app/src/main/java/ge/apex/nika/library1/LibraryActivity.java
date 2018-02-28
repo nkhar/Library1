@@ -35,7 +35,7 @@ import ge.apex.nika.library1.Fragments.GenreFragment;
 
 public class LibraryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener, GenreFragment.OnListGenreFragmentInteractionListener,
-        BookFragment.OnListBookFragmentInteractionListener{
+        BookFragment.OnListBookFragmentInteractionListener, GenreFragment.OnListGenreFragmentLongClickListener{
 
     // Widgets
    // TextView mTextView;
@@ -44,13 +44,14 @@ public class LibraryActivity extends AppCompatActivity
     protected final static int MAX_NUM_TO_CREATE = 8;
 
     public static final String EXTRA_MESSAGE = "ge.apex.nika.library1.MESSAGE";
+    public static final String EXTRA_MESSAGE_ID = "ge.apex.nika.library1.MESSAGEID";
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
 
     // Declaration of DAO to interact with corresponding Author table
-   // protected Dao<Author, Integer> authorDao;
-   // List<Author> authorList = null;
+    protected Dao<Genre, Integer> genreDao;
+    List<Genre> genreList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +161,31 @@ public class LibraryActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+         /*
+         *  You'll need this in your class to release the helper when done.
+		 */
+        if(databaseHelper != null ) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    /**
+     * getDatabaseHelper returns instance of DatabaseHelper class
+     */
+    public DatabaseHelper getDatabaseHelper() {
+        if(databaseHelper == null ) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 
 
+
+
+    /*
+    onClick listeners for different fragments
+     */
     @Override
     public void onListFragmentInteraction(Author author) {
 
@@ -176,7 +199,9 @@ public class LibraryActivity extends AppCompatActivity
     public void onListGenreFragmentInteraction(Genre genreItem) {
         Intent intent = new Intent(this, GenreDetailActivity.class);
         String message = genreItem.getName();
+        int localGenreId = genreItem.getGenreId();
         intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(EXTRA_MESSAGE_ID, localGenreId);
         startActivity(intent);
     }
 
@@ -186,5 +211,29 @@ public class LibraryActivity extends AppCompatActivity
         int messageID = bookItem.getBookId();
         intent.putExtra(EXTRA_MESSAGE, messageID);
         startActivity(intent);
+    }
+    /*
+    onLongClickListeners for fragments.
+     */
+    @Override
+    public void onListGenreFragmentLongClickListener(Genre genreItem) {
+        deleteGenreItem(genreItem);
+        GenreFragment.updateAdapterList(genreList);
+    }
+
+    public void deleteGenreItem(Genre gItem) {
+        try {
+
+
+            genreDao = getDatabaseHelper().getGenreDao();
+            //List<SimpleData>
+           genreDao.delete(gItem);
+           genreList = genreDao.queryForAll();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Log.i(LOG_TAG, "Done with GenreFragment at " + System.currentTimeMillis());
     }
 }

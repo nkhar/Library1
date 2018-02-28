@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -52,7 +53,8 @@ public class GenreDetailActivity extends AppCompatActivity {
         * Getting intent to retrieve arguments passed by choosing RecyclerView item.
          */
         Intent localIntent = getIntent();
-        String localGenreName = localIntent.getStringExtra(LibraryActivity.EXTRA_MESSAGE);
+        final String localGenreName = localIntent.getStringExtra(LibraryActivity.EXTRA_MESSAGE);
+        final int localGenreId = localIntent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
         editGenreText.setText(localGenreName);
 
 
@@ -61,12 +63,19 @@ public class GenreDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = editGenreText.getText().toString();
-                doGenreDatabaseStuff(textView, message);
-                counter++;
-                if(counter == 3) {
-                    finish();
+                if (localGenreId == 0) {
+                    Log.d(LOG_TAG, "Genre should be created");
+                    createGenreInDatabase(textView, message);
                 }
-                //finish();
+                else {
+                    Log.d(LOG_TAG, "Genre was selected so it should be updated");
+                    updateGenreInDatabase(localGenreId, message);
+                }
+                    counter++;
+                    if (counter == 3) {
+                        finish();
+                    }
+                    //finish();
             }
         });
 
@@ -95,9 +104,20 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
+    public void updateGenreInDatabase(int genreId, String genreName) {
+        try{
+            genreDao = getDatabaseHelper().getGenreDao();
+            Genre genre = genreDao.queryForId(genreId);
+            genre.setName(genreName);
+            genreDao.update(genre);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-    public void doGenreDatabaseStuff(TextView tv, String genreName) {
+    public void createGenreInDatabase(TextView tv, String genreName) {
         try {
 
             genreDao = getDatabaseHelper().getGenreDao();

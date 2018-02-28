@@ -39,10 +39,11 @@ public class GenreFragment extends Fragment {
     protected final String LOG_TAG = "GenreFragment";
 
 
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     private OnListGenreFragmentInteractionListener mListener;
+
+    private OnListGenreFragmentLongClickListener mLongClickListener;
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
@@ -51,7 +52,7 @@ public class GenreFragment extends Fragment {
     protected Dao<Genre, Integer> genreDao;
     List<Genre> genreList = null;
 
-    MyGenreRecyclerViewAdapter adapter;
+    static MyGenreRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -101,7 +102,7 @@ public class GenreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-        adapter = new MyGenreRecyclerViewAdapter(genreList, mListener);
+        adapter = new MyGenreRecyclerViewAdapter(genreList, mListener, mLongClickListener);
         recyclerView.setAdapter(adapter);
 
         RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
@@ -128,6 +129,14 @@ public class GenreFragment extends Fragment {
         Log.d(LOG_TAG, "onCreateView method finished execution");
         return view;
 
+    }
+
+    /*
+     *
+     * This static method is used to update the list in RecyclerView
+     */
+    public static void updateAdapterList(List<Genre> listData) {
+        adapter.updateList(listData);
     }
 
     @Override
@@ -168,12 +177,19 @@ public class GenreFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+        if (context instanceof OnListGenreFragmentLongClickListener) {
+            mLongClickListener = (OnListGenreFragmentLongClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListGenreFragmentLongClickListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mLongClickListener = null;
           /*
          *  You'll need this in your class to release the helper when done.
 		 */
@@ -196,8 +212,13 @@ public class GenreFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListGenreFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onListGenreFragmentInteraction(Genre genreItem);
+    }
+
+    public interface OnListGenreFragmentLongClickListener {
+
+        void onListGenreFragmentLongClickListener(Genre genreItem);
     }
 
 
@@ -228,4 +249,6 @@ public class GenreFragment extends Fragment {
         }
         Log.i(LOG_TAG, "Done with GenreFragment at " + System.currentTimeMillis());
     }
+
+
 }

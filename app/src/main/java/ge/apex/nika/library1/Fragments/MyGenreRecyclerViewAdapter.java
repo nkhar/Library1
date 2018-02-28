@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecy
 
     private  List<Genre> mGenreValues;
     private final GenreFragment.OnListGenreFragmentInteractionListener mListener;
+    private final GenreFragment.OnListGenreFragmentLongClickListener mLongClickListener;
 
     protected final String LOG_TAG = "MyGenreRecyclerAdapter";
 
-    public MyGenreRecyclerViewAdapter(List<Genre> items, GenreFragment.OnListGenreFragmentInteractionListener listener) {
+    public MyGenreRecyclerViewAdapter(List<Genre> items, GenreFragment.OnListGenreFragmentInteractionListener listener, GenreFragment.OnListGenreFragmentLongClickListener longClickListener) {
         mGenreValues = items;
         mListener = listener;
+        mLongClickListener = longClickListener;
     }
 
     /**
@@ -69,6 +72,27 @@ public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecy
                     mListener.onListGenreFragmentInteraction(holder.mGenre);
                 }
             }
+        });
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Toast.makeText(v.getContext(), "This is a long click", Toast.LENGTH_LONG).show();
+                if (null != mLongClickListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mLongClickListener.onListGenreFragmentLongClickListener(holder.mGenre);
+                }
+
+                //int position = mGenreValues.indexOf(holder.mGenre);
+               // mGenreValues.remove(position);
+                //notifyItemRemoved(position);
+
+                return true;
+            }
+
+
         });
 
     }
