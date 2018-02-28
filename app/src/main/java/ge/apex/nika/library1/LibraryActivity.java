@@ -2,6 +2,7 @@ package ge.apex.nika.library1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,7 @@ import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthorFragment.OnListFragmentInteractionListener, GenreFragment.OnListGenreFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener, GenreFragment.OnListGenreFragmentInteractionListener,
         BookFragment.OnListBookFragmentInteractionListener, GenreFragment.OnListGenreFragmentLongClickListener{
 
     // Widgets
@@ -118,7 +119,7 @@ public class LibraryActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -183,17 +184,6 @@ public class LibraryActivity extends AppCompatActivity
 
 
 
-    /*
-    onClick listeners for different fragments
-     */
-    @Override
-    public void onListFragmentInteraction(Author author) {
-
-        Intent intent = new Intent(this, AuthorDetailActivity.class);
-        int messageID = author.getId();
-        intent.putExtra(EXTRA_MESSAGE, messageID);
-        startActivity(intent);
-    }
 
     @Override
     public void onListGenreFragmentInteraction(Genre genreItem) {

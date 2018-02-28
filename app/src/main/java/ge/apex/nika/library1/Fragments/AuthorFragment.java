@@ -20,6 +20,7 @@ import com.j256.ormlite.dao.Dao;
 import ge.apex.nika.library1.AuthorDetailActivity;
 import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.DatabaseHelper;
+import ge.apex.nika.library1.LibraryActivity;
 import ge.apex.nika.library1.R;
 
 
@@ -29,10 +30,10 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link}
  * interface.
  */
-public class AuthorFragment extends Fragment {
+public class AuthorFragment extends Fragment implements ILibObjectCrud<Author> {
 
     protected final String LOG_TAG = "AuthorFragment";
 
@@ -40,14 +41,8 @@ public class AuthorFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private OnListFragmentInteractionListener mListener;
-
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
-
-    // Declaration of DAO to interact with corresponding Author table
-    protected Dao<Author, Integer> authorDao;
-    List<Author> authorList = null;
 
     MyAuthorRecyclerViewAdapter adapter;
 
@@ -67,16 +62,6 @@ public class AuthorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /*
-        *
-        *
-        *
-         */
-        doAuthorStuff();
-        /*
-        *
-        *
-         */
 
         View view = inflater.inflate(R.layout.fragment_author_list, container, false);
 
@@ -90,16 +75,16 @@ public class AuthorFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            adapter = new MyAuthorRecyclerViewAdapter(authorList, mListener);
+        try {
+            adapter = new MyAuthorRecyclerViewAdapter(getDatabaseHelper().getAuthorDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        adapter.setmListener(this);
             recyclerView.setAdapter(adapter);
 
             RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(localItemDecoration);
-
-
-
-
-
 
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_author_fragment);
@@ -124,70 +109,22 @@ public class AuthorFragment extends Fragment {
         Log.d(LOG_TAG, "onResume method was called");
         super.onResume();
         try {
-            /*
-            This does not work
-             */
-            authorList = authorDao.queryForAll();
-
-            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
-            /*
-            This method caused instance(field) variable mAuthorValues in class
-            MyAuthorRecyclerViewAdapter to be declared without being final. Therefore
-             there might be another way to change RecyclerView with mAuthorValues being final.
-             */
-            adapter.updateList(authorList);
-
-
-            Log.d(LOG_TAG, "onResume size of authorList is: " + authorList.size());
-
-
-
+            adapter.updateList(getDatabaseHelper().getAuthorDao().queryForAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-
-
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-          /*
-         *  You'll need this in your class to release the helper when done.
-		 */
+
         if(databaseHelper != null ) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Author item);
-    }
 
 
     /**
@@ -200,39 +137,18 @@ public class AuthorFragment extends Fragment {
         return databaseHelper;
     }
 
-    public void doAuthorStuff() {
-        try {
 
-            authorDao = getDatabaseHelper().getAuthorDao();
-            //List<SimpleData>
-            authorList = authorDao.queryForAll();
-            Log.d(LOG_TAG, "WE got authorDAO");
 
-            // if we already have items in the database
-          /*  int authorC = 1;
-            for (Author author : authorList) {
-                authorDao.delete(author);
-                Log.i(LOG_TAG, "deleting author(" + author.getId() + ")");
-                authorC++;
-            }*/
-
-          /*
-            Author author = new Author("Jack", "London", 1876);
-            // store it in the database
-            authorDao.create(author);
-
-            author = new Author("Mark", "Twain", 1835);
-            // store it in the database
-            authorDao.create(author);
-            author = new Author("Charles", "Dickens", 1812);
-            // store it in the database
-            authorDao.create(author);
-            */
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Log.i(LOG_TAG, "Done with AuthorFragment at " + System.currentTimeMillis());
+    @Override
+    public void onClick(Author value) {
+        Intent intent = new Intent(getActivity(), AuthorDetailActivity.class);
+        int messageID = value.getId();
+        intent.putExtra(LibraryActivity.EXTRA_MESSAGE, messageID);
+        startActivity(intent);
     }
 
+    @Override
+    public void onLongClick(Author value) {
+
+    }
 }
