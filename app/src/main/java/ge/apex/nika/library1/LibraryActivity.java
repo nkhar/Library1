@@ -28,8 +28,7 @@ import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        BookFragment.OnListBookFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     // Widgets
    // TextView mTextView;
@@ -40,13 +39,6 @@ public class LibraryActivity extends AppCompatActivity
     public static final String EXTRA_MESSAGE = "ge.apex.nika.library1.MESSAGE";
     public static final String EXTRA_MESSAGE_ID = "ge.apex.nika.library1.MESSAGEID";
 
-    // Reference of DatabaseHelper class to access its DAOs and other components pushing a
-    protected DatabaseHelper databaseHelper = null;
-
-    // Declaration of DAO to interact with corresponding Author table
-    protected Dao<Genre, Integer> genreDao;
-    List<Genre> genreList = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +46,6 @@ public class LibraryActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,8 +56,6 @@ public class LibraryActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // my code
-       // mTextView = (TextView) findViewById(R.id.textview_display_database_tables);
     }
 
     @Override
@@ -155,49 +135,8 @@ public class LibraryActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-         /*
-         *  You'll need this in your class to release the helper when done.
-		 */
-        if(databaseHelper != null ) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
-
-    /**
-     * getDatabaseHelper returns instance of DatabaseHelper class
-     */
-    public DatabaseHelper getDatabaseHelper() {
-        if(databaseHelper == null ) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
     }
 
 
 
-    @Override
-    public void onListBookFragmentInteraction(Book bookItem) {
-        Intent intent = new Intent(this, BookDetailActivity.class);
-        int messageID = bookItem.getBookId();
-        intent.putExtra(EXTRA_MESSAGE, messageID);
-        startActivity(intent);
-    }
-
-
-    public void deleteGenreItem(Genre gItem) {
-        try {
-
-
-            genreDao = getDatabaseHelper().getGenreDao();
-            //List<SimpleData>
-           genreDao.delete(gItem);
-           genreList = genreDao.queryForAll();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Log.i(LOG_TAG, "Done with GenreFragment at " + System.currentTimeMillis());
-    }
 }

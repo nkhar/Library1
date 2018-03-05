@@ -44,13 +44,14 @@ public class MyAuthorRecyclerViewAdapter extends RecyclerViewListAdapter<MyAutho
         holder.mLName.setText(value.getLName());
         holder.mDateBorn.setText(String.valueOf(value.getDateBorn()));
         final ILibObjectCrud<Author> listener = getmListener();
-        if(listener != null)
+        if(listener != null) {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onClick(value);
                 }
             });
+        }
     }
 
 

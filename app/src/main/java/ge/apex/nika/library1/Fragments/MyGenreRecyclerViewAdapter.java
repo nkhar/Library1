@@ -49,13 +49,14 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
         holder.mIdTextView.setText(String.valueOf(value.getGenreId()));
         holder.mGenreNameTextView.setText(value.getName());
         final ILibObjectCrud listener = getmListener();
-        if(listener != null)
+        if(listener != null) {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onClick(value);
                 }
             });
+        }
     }
 
 

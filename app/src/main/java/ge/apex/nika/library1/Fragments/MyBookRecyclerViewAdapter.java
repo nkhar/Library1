@@ -16,27 +16,14 @@ import ge.apex.nika.library1.R;
 import java.util.List;
 
 
-public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecyclerViewAdapter.ViewHolder> {
-
-    private  List<Book> mBookValues;
-    private final BookFragment.OnListBookFragmentInteractionListener mListener;
+public class MyBookRecyclerViewAdapter extends RecyclerViewListAdapter<MyBookRecyclerViewAdapter.ViewHolder, Book> {
 
     protected final String LOG_TAG = "MyBookRecyclerAdapter";
 
-    public MyBookRecyclerViewAdapter(List<Book> items, BookFragment.OnListBookFragmentInteractionListener listener) {
-        mBookValues = items;
-        mListener = listener;
+    public MyBookRecyclerViewAdapter(List<Book> items) {
+        super(items);
     }
 
-    /**
-     This method caused instance(field) variable mGenreValues in class
-     MyGenreRecyclerViewAdapter to be declared without being final. Therefore
-     there might be another way to change RecyclerView.
-     */
-    public void updateList(List<Book> listData) {
-        mBookValues = listData;
-        notifyDataSetChanged();
-    }
 
     @NonNull
     @Override
@@ -53,29 +40,29 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-
-        holder.mBook = mBookValues.get(position);
-        holder.mBookIdTextView.setText(String.valueOf(mBookValues.get(position).getBookId()));
-        holder.mTitleTextView.setText(mBookValues.get(position).getTitle());
-        holder.mBookAuthorTextView.setText(mBookValues.get(position).getAuthorId().getFName() + mBookValues.get(position).getAuthorId().getLName());
-        holder.mBookGenreTextView.setText(mBookValues.get(position).getGenreId().getName());
-        holder.mBookYearPublishedTextView.setText(String.valueOf(mBookValues.get(position).getDate()));
-        holder.mBookLanguageTextView.setText(mBookValues.get(position).getLang());
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final Book value) {
+        if(value == null)
+            return;
 
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListBookFragmentInteraction(holder.mBook);
+        holder.mBook = value;
+        holder.mBookIdTextView.setText(String.valueOf(value.getBookId()));
+        holder.mTitleTextView.setText(value.getTitle());
+        holder.mBookAuthorTextView.setText(value.getAuthorId().getFName() + value.getAuthorId().getLName());
+        holder.mBookGenreTextView.setText(value.getGenreId().getName());
+        holder.mBookYearPublishedTextView.setText(String.valueOf(value.getDate()));
+        holder.mBookLanguageTextView.setText(value.getLang());
+        final ILibObjectCrud listener = getmListener();
+        if (listener != null) {
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(value);
                 }
-            }
-        });
+            });
+        }
 
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+     /*   holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
 
@@ -89,14 +76,10 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
 
 
         });
+        */
 
     }
 
-    @Override
-    public int getItemCount() {
-        Log.d(LOG_TAG, "size is: " + mBookValues.size());
-        return mBookValues.size();
-    }
 
 
     // Provide a direct reference to each of the views within a data item
