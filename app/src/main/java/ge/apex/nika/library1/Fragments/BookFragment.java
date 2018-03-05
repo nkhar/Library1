@@ -16,19 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.Dao;
+
 
 import ge.apex.nika.library1.BookDetailActivity;
-import ge.apex.nika.library1.Data.Author;
 import ge.apex.nika.library1.Data.Book;
-import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.DatabaseHelper;
 import ge.apex.nika.library1.R;
 
 import java.sql.SQLException;
-import java.util.List;
 
-import static ge.apex.nika.library1.LibraryActivity.EXTRA_MESSAGE;
+
+
+import static ge.apex.nika.library1.LibraryActivity.EXTRA_MESSAGE_ID;
 
 /**
  * A fragment representing a list of Items.
@@ -133,7 +132,7 @@ public class BookFragment extends Fragment implements ILibObjectCrud<Book> {
     public void onClick(Book value) {
         Intent intent = new Intent(getActivity(), BookDetailActivity.class);
         int messageID = value.getBookId();
-        intent.putExtra(EXTRA_MESSAGE, messageID);
+        intent.putExtra(EXTRA_MESSAGE_ID, messageID);
         startActivity(intent);
 
     }

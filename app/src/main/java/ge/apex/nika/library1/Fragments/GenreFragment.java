@@ -158,7 +158,6 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
     public void onClick(Genre value) {
         Intent intent = new Intent(getActivity(), GenreDetailActivity.class);
         int messageID = value.getGenreId();
-        intent.putExtra(LibraryActivity.EXTRA_MESSAGE, value.getName());
         intent.putExtra(LibraryActivity.EXTRA_MESSAGE_ID, messageID);
         startActivity(intent);
     }

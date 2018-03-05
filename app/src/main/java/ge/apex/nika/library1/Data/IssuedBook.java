@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Created by Nika on 13/02/2018.
+ * This class should create table in database
  */
 
 @DatabaseTable(tableName = "issuedbooks")

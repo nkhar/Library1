@@ -22,6 +22,7 @@ import ge.apex.nika.library1.Data.Genre;
 
 /**
  * Created by Nika on 20/02/2018.
+ * This displays detail view of author
  */
 
 public class AuthorDetailActivity extends AppCompatActivity{
@@ -62,7 +63,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
         // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
 
-            int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE, 0);
+            int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
             if(messageID != 0) {
                 TextView textView = findViewById(R.id.author_detail_textview);
                 displayAuthorInfo(messageID, textView);

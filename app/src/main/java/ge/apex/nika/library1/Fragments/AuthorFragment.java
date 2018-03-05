@@ -140,7 +140,7 @@ public class AuthorFragment extends Fragment implements ILibObjectCrud<Author> {
     public void onClick(Author value) {
         Intent intent = new Intent(getActivity(), AuthorDetailActivity.class);
         int messageID = value.getId();
-        intent.putExtra(LibraryActivity.EXTRA_MESSAGE, messageID);
+        intent.putExtra(LibraryActivity.EXTRA_MESSAGE_ID, messageID);
         startActivity(intent);
     }
 

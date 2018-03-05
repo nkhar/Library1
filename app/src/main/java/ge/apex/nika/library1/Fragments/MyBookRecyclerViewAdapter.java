@@ -1,14 +1,13 @@
 package ge.apex.nika.library1.Fragments;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import ge.apex.nika.library1.Data.Book;
 import ge.apex.nika.library1.R;
@@ -28,15 +27,8 @@ public class MyBookRecyclerViewAdapter extends RecyclerViewListAdapter<MyBookRec
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        // Inflate the custom layout
-        View view = inflater.inflate(R.layout.fragment_book, parent, false);
-
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_book, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override

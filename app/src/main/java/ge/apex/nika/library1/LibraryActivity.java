@@ -1,27 +1,18 @@
 package ge.apex.nika.library1;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.Dao;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import ge.apex.nika.library1.Data.Book;
-import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.Fragments.AuthorFragment;
 import ge.apex.nika.library1.Fragments.BookFragment;
 import ge.apex.nika.library1.Fragments.GenreFragment;
@@ -30,17 +21,15 @@ import ge.apex.nika.library1.Fragments.GenreFragment;
 public class LibraryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    // Widgets
-   // TextView mTextView;
+
 
     protected final String LOG_TAG = "LibraryActivity";
-    protected final static int MAX_NUM_TO_CREATE = 8;
 
-    public static final String EXTRA_MESSAGE = "ge.apex.nika.library1.MESSAGE";
-    public static final String EXTRA_MESSAGE_ID = "ge.apex.nika.library1.MESSAGEID";
+    public static final String EXTRA_MESSAGE_ID = "ge.apex.nika.library1.MESSAGE.ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "We are in onCreate method");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -104,17 +93,17 @@ public class LibraryActivity extends AppCompatActivity
 
             // Insert the fragment by replacing FrameLayout.
             AuthorFragment authorFragment = new AuthorFragment();
-            fragmentManager.beginTransaction().replace(R.id.flContent, authorFragment, "AUTHORTAG").commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, authorFragment, "AUTHOR_TAG").commit();
 
         } else if (id == R.id.nav_books) {
             // Insert the fragment by replacing FrameLayout.
             BookFragment bookFragment = new BookFragment();
-            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment, "BOOKTAG").commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, bookFragment, "BOOK_TAG").commit();
 
         } else if (id == R.id.nav_genres) {
             // Insert the fragment by replacing FrameLayout.
             GenreFragment genreFragment = new GenreFragment();
-            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRETAG").commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, genreFragment, "GENRE_TAG").commit();
 
         } else if (id == R.id.nav_share) {
 
@@ -128,15 +117,6 @@ public class LibraryActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    /**
-     * Activity lifecycle method called when it is destroyed.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
 
 
 }

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -29,7 +28,6 @@ public class GenreDetailActivity extends AppCompatActivity {
     protected Dao<Genre,Integer> genreDao;
     List<Genre> genreList = null;
 
-    TextView textView;
     Button buttonAdd;
     EditText editGenreText;
 
@@ -41,40 +39,34 @@ public class GenreDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         buttonAdd = findViewById(R.id.genreAddButton);
         editGenreText = findViewById(R.id.genreEditText);
-        textView= findViewById(R.id.genre_add_textview);
 
 
         /*
         * Getting intent to retrieve arguments passed by choosing RecyclerView item.
          */
         Intent localIntent = getIntent();
-        final String localGenreName = localIntent.getStringExtra(LibraryActivity.EXTRA_MESSAGE);
         final int localGenreId = localIntent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
-        editGenreText.setText(localGenreName);
-
+        // write text in edit fields using id passed through intent
+        displayInfoInEditText(localGenreId);
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
-            int counter = 0;
             @Override
             public void onClick(View view) {
                 String message = editGenreText.getText().toString();
                 if (localGenreId == 0) {
                     Log.d(LOG_TAG, "Genre should be created");
-                    createGenreInDatabase(textView, message);
+                    createGenreInDatabase( message);
                 }
                 else {
                     Log.d(LOG_TAG, "Genre was selected so it should be updated");
                     updateGenreInDatabase(localGenreId, message);
                 }
-                    counter++;
-                    if (counter == 3) {
-                        finish();
-                    }
-                    //finish();
+                finish();
             }
         });
 
     }
+
 
     @Override
     protected void onDestroy() {
@@ -99,6 +91,19 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
+    private void displayInfoInEditText(int genreId) {
+        if(genreId == 0) return;
+        try{
+            genreDao = getDatabaseHelper().getGenreDao();
+            Genre genre = genreDao.queryForId(genreId);
+            editGenreText.setText(genre.getName());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void updateGenreInDatabase(int genreId, String genreName) {
         try{
             genreDao = getDatabaseHelper().getGenreDao();
@@ -112,39 +117,16 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
-    public void createGenreInDatabase(TextView tv, String genreName) {
+    public void createGenreInDatabase( String genreName) {
         try {
 
             genreDao = getDatabaseHelper().getGenreDao();
-
             genreList = genreDao.queryForAll();
             Log.d(LOG_TAG, "WE got genreDao");
-
-            StringBuilder sb = new StringBuilder();
-
-
-            sb.append("+++++++++++++++++++++++++++++++\n\n");
-            for(Genre tempGenre : genreList) {
-                if(genreName.equals(tempGenre.getName())){
-                    sb.append("\n\n Genre with that name already exists\n\n");
-                }
-                sb.append(tempGenre.toString() + " \n\n");
-                Log.d(LOG_TAG, "genre name is: " + tempGenre.getName());
-
-            }
-
-            sb.append("+++++++++++++++++++++++++++++++ \n\n");
-
-            if(genreName.equals("GRIMM")) {
                 Genre genre = new Genre(genreName);
                 genreDao.create(genre);
                 genreList = genreDao.queryForAll();
-            }
-
             Log.d(LOG_TAG, "Thr genre list size is: " + genreList.size());
-            tv.setText(sb.toString());
-
-
 
         } catch (SQLException e) {
             e.printStackTrace();

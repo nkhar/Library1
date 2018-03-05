@@ -15,6 +15,7 @@ import ge.apex.nika.library1.R;
 
 /**
  * Created by Nika on 21/02/2018.
+ * This is an adapter to display genre items in RecyclerView.
  */
 
 public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreRecyclerViewAdapter.ViewHolder, Genre> {
@@ -28,7 +29,7 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -36,8 +37,7 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
         View view = inflater.inflate(R.layout.fragment_genre, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
