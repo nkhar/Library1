@@ -18,29 +18,14 @@ import ge.apex.nika.library1.R;
  * Created by NATIA on 21/02/2018.
  */
 
-public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecyclerViewAdapter.ViewHolder> {
-
-    private  List<Genre> mGenreValues;
-    private final GenreFragment.OnListGenreFragmentInteractionListener mListener;
-    private final GenreFragment.OnListGenreFragmentLongClickListener mLongClickListener;
+public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreRecyclerViewAdapter.ViewHolder, Genre> {
 
     protected final String LOG_TAG = "MyGenreRecyclerAdapter";
 
-    public MyGenreRecyclerViewAdapter(List<Genre> items, GenreFragment.OnListGenreFragmentInteractionListener listener, GenreFragment.OnListGenreFragmentLongClickListener longClickListener) {
-        mGenreValues = items;
-        mListener = listener;
-        mLongClickListener = longClickListener;
+    public MyGenreRecyclerViewAdapter(List <Genre> items) {
+       super(items);
     }
 
-    /**
-            This method caused instance(field) variable mGenreValues in class
-            MyGenreRecyclerViewAdapter to be declared without being final. Therefore
-             there might be another way to change RecyclerView.
-             */
-    public void updateList(List<Genre> listData) {
-        mGenreValues = listData;
-        notifyDataSetChanged();
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,52 +41,24 @@ public class MyGenreRecyclerViewAdapter extends RecyclerView.Adapter<MyGenreRecy
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final Genre value) {
 
-        holder.mGenre = mGenreValues.get(position);
-        holder.mIdTextView.setText(mGenreValues.get(position).getGenreId() + "");
-        holder.mGenreNameTextView.setText(mGenreValues.get(position).getName());
-
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListGenreFragmentInteraction(holder.mGenre);
+        if(value == null)
+            return;
+        holder.mGenre =value;
+        holder.mIdTextView.setText(String.valueOf(value.getGenreId()));
+        holder.mGenreNameTextView.setText(value.getName());
+        final ILibObjectCrud listener = getmListener();
+        if(listener != null)
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(value);
                 }
-            }
-        });
-
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                Toast.makeText(v.getContext(), "This is a long click", Toast.LENGTH_LONG).show();
-                if (null != mLongClickListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mLongClickListener.onListGenreFragmentLongClickListener(holder.mGenre);
-                }
-
-                //int position = mGenreValues.indexOf(holder.mGenre);
-               // mGenreValues.remove(position);
-                //notifyItemRemoved(position);
-
-                return true;
-            }
-
-
-        });
+            });
 
     }
 
-    @Override
-    public int getItemCount() {
-        Log.d(LOG_TAG, "size is: " + mGenreValues.size());
-        return mGenreValues.size();
-    }
 
 
     // Provide a direct reference to each of the views within a data item

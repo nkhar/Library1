@@ -37,8 +37,6 @@ public class AuthorFragment extends Fragment implements ILibObjectCrud<Author> {
 
     protected final String LOG_TAG = "AuthorFragment";
 
-
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a

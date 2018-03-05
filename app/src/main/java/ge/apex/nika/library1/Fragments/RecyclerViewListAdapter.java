@@ -11,7 +11,6 @@ import ge.apex.nika.library1.Data.Author;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Author} and makes a call to the
  * specified {@link AuthorFragment}.
- * TODO: Replace the implementation with code for your data type.
  */
 
 
@@ -21,16 +20,16 @@ public  abstract class RecyclerViewListAdapter<T extends RecyclerView.ViewHolder
     private ILibObjectCrud<E> mListener;
 
 
-
-    public void updateList(List<E> listData) {
-        mValues = listData;
-        notifyDataSetChanged();
-    }
     public RecyclerViewListAdapter() {
     }
 
     public RecyclerViewListAdapter(List<E> items) {
         mValues = items;
+    }
+
+    public void updateList(List<E> listData) {
+        mValues = listData;
+        notifyDataSetChanged();
     }
 
     public abstract T onCreateViewHolder(ViewGroup parent, int viewType);

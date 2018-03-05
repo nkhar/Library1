@@ -35,8 +35,8 @@ import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GenreFragment.OnListGenreFragmentInteractionListener,
-        BookFragment.OnListBookFragmentInteractionListener, GenreFragment.OnListGenreFragmentLongClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        BookFragment.OnListBookFragmentInteractionListener{
 
     // Widgets
    // TextView mTextView;
@@ -183,18 +183,6 @@ public class LibraryActivity extends AppCompatActivity
 
 
 
-
-
-    @Override
-    public void onListGenreFragmentInteraction(Genre genreItem) {
-        Intent intent = new Intent(this, GenreDetailActivity.class);
-        String message = genreItem.getName();
-        int localGenreId = genreItem.getGenreId();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        intent.putExtra(EXTRA_MESSAGE_ID, localGenreId);
-        startActivity(intent);
-    }
-
     @Override
     public void onListBookFragmentInteraction(Book bookItem) {
         Intent intent = new Intent(this, BookDetailActivity.class);
@@ -202,14 +190,7 @@ public class LibraryActivity extends AppCompatActivity
         intent.putExtra(EXTRA_MESSAGE, messageID);
         startActivity(intent);
     }
-    /*
-    onLongClickListeners for fragments.
-     */
-    @Override
-    public void onListGenreFragmentLongClickListener(Genre genreItem) {
-        deleteGenreItem(genreItem);
-        GenreFragment.updateAdapterList(genreList);
-    }
+
 
     public void deleteGenreItem(Genre gItem) {
         try {

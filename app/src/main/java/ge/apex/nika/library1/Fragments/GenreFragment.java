@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,39 +18,34 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.Dao;
+
 
 import java.sql.SQLException;
-import java.util.List;
 
-import ge.apex.nika.library1.AuthorDetailActivity;
+
+
 import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.DatabaseHelper;
 import ge.apex.nika.library1.GenreDetailActivity;
+import ge.apex.nika.library1.LibraryActivity;
 import ge.apex.nika.library1.R;
 
 /**
- * Created by NATIA on 21/02/2018.
+ * Created by Nika on 21/02/2018.
+ * @author Nika
+ * This displays genre fragment after it has been selected in navigation drawer.
  */
 
 
-public class GenreFragment extends Fragment {
+public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
 
     protected final String LOG_TAG = "GenreFragment";
 
 
     private int mColumnCount = 1;
 
-    private OnListGenreFragmentInteractionListener mListener;
-
-    private OnListGenreFragmentLongClickListener mLongClickListener;
-
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
-
-    // Declaration of DAO to interact with corresponding Author table
-    protected Dao<Genre, Integer> genreDao;
-    List<Genre> genreList = null;
 
     static MyGenreRecyclerViewAdapter adapter;
 
@@ -73,19 +68,8 @@ public class GenreFragment extends Fragment {
 
         Log.d(LOG_TAG, "onCreateView method was called");
 
-        /*
-        *
-        *
-        *
-         */
-        doGenreStuff();
-        /*
-        *
-        *
-         */
 
         View view = inflater.inflate(R.layout.fragment_genre_list, container, false);
-
 
 
             Context context = view.getContext();
@@ -102,13 +86,16 @@ public class GenreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-        adapter = new MyGenreRecyclerViewAdapter(genreList, mListener, mLongClickListener);
+        try {
+            adapter = new MyGenreRecyclerViewAdapter(getDatabaseHelper().getGenreDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        adapter.setmListener(this);
         recyclerView.setAdapter(adapter);
 
         RecyclerView.ItemDecoration localItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(localItemDecoration);
-
-
 
 
 
@@ -120,7 +107,7 @@ public class GenreFragment extends Fragment {
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                        */;
+                        */
                 Intent intent = new Intent(getActivity(), GenreDetailActivity.class);
                 GenreFragment.this.startActivity(intent);
             }
@@ -131,94 +118,28 @@ public class GenreFragment extends Fragment {
 
     }
 
-    /*
-     *
-     * This static method is used to update the list in RecyclerView
-     */
-    public static void updateAdapterList(List<Genre> listData) {
-        adapter.updateList(listData);
-    }
+
 
     @Override
     public void onResume() {
         Log.d(LOG_TAG, "onResume method was called");
         super.onResume();
         try {
-            /*
-            This does not work
-             */
-            genreList = genreDao.queryForAll();
-
-            Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
-            /*
-            This method caused instance(field) variable mGenreValues in class
-            MyGenreRecyclerViewAdapter to be declared without being final. Therefore
-             there might be another way to change RecyclerView with mGenreValues being final.
-             */
-            adapter.updateList(genreList);
-
-
-            Log.d(LOG_TAG, "onResume size of genreList is: " + genreList.size());
-
-
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListGenreFragmentInteractionListener) {
-            mListener = (OnListGenreFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-        if (context instanceof OnListGenreFragmentLongClickListener) {
-            mLongClickListener = (OnListGenreFragmentLongClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListGenreFragmentLongClickListener");
+            adapter.updateList(getDatabaseHelper().getGenreDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-        mLongClickListener = null;
-          /*
-         *  You'll need this in your class to release the helper when done.
-		 */
+
         if(databaseHelper != null ) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
         }
-    }
-
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListGenreFragmentInteractionListener {
-
-        void onListGenreFragmentInteraction(Genre genreItem);
-    }
-
-    public interface OnListGenreFragmentLongClickListener {
-
-        void onListGenreFragmentLongClickListener(Genre genreItem);
     }
 
 
@@ -232,23 +153,17 @@ public class GenreFragment extends Fragment {
         return databaseHelper;
     }
 
-
-    public void doGenreStuff() {
-        try {
-
-
-            genreDao = getDatabaseHelper().getGenreDao();
-            //List<SimpleData>
-            genreList = genreDao.queryForAll();
-            Log.d(LOG_TAG, "doGenreStuff queryForAll was called, size of genreList is: " + genreList.size());
-            Log.d(LOG_TAG, "WE got genreDAO");
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Log.i(LOG_TAG, "Done with GenreFragment at " + System.currentTimeMillis());
+    @Override
+    public void onClick(Genre value) {
+        Intent intent = new Intent(getActivity(), GenreDetailActivity.class);
+        int messageID = value.getGenreId();
+        intent.putExtra(LibraryActivity.EXTRA_MESSAGE, value.getName());
+        intent.putExtra(LibraryActivity.EXTRA_MESSAGE_ID, messageID);
+        startActivity(intent);
     }
 
+    @Override
+    public void onLongClick(Genre value) {
 
+    }
 }
