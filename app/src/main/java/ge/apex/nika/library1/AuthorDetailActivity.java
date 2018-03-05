@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -17,8 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ge.apex.nika.library1.Data.Author;
-import ge.apex.nika.library1.Data.Book;
-import ge.apex.nika.library1.Data.Genre;
+
 
 /**
  * Created by Nika on 20/02/2018.
@@ -35,14 +33,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
     // Declaration of DAO to interact with corresponding Author table
     protected Dao<Author, Integer> authorDao;
     List<Author> authorList = null;
-    // Declaration of DAO to interact with corresponding Book table
-    protected Dao<Book,Integer> bookDao;
-    List<Book> bookList = null;
-    // Declaration of DAO to interact with corresponding Genre table
-    protected Dao<Genre,Integer> genreDao;
-    List<Genre> genreList = null;
 
-    TextView textView;
     Button buttonAddAuthor;
     EditText editFirstNameText;
     EditText editLastNameText;
@@ -58,29 +49,25 @@ public class AuthorDetailActivity extends AppCompatActivity{
         editFirstNameText = findViewById(R.id.authorFirstNameEditText);
         editLastNameText = findViewById(R.id.authorLastNameEditText);
         editDateBornText = findViewById(R.id.authorDateBornEditText);
-        textView= findViewById(R.id.author_detail_textview);
 
         // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
-
-            int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
-            if(messageID != 0) {
-                TextView textView = findViewById(R.id.author_detail_textview);
-                displayAuthorInfo(messageID, textView);
-            }
-
-       // doAllDaoStuff(textView);
+        final int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
+        // write text in edit fields using id passed through intent
+        displayAuthorInfo(messageID);
 
         buttonAddAuthor.setOnClickListener(new View.OnClickListener() {
-            int counter = 0;
             @Override
             public void onClick(View view) {
-                addAuthor();
-                counter++;
-                if(counter == 3) {
-                    finish();
+                if(messageID == 0) {
+                    Log.d(LOG_TAG, "Author should be created");
+                    createAuthorInDatabase();
                 }
-                //finish();
+                else{
+                    Log.d(LOG_TAG, "Author was selected so it should be updated");
+                    updateAuthorInDatabase(messageID);
+                }
+                finish();
             }
         });
 
@@ -113,12 +100,13 @@ public class AuthorDetailActivity extends AppCompatActivity{
 
 
 
-    public  void displayAuthorInfo (int authorID, TextView tv) {
+    public  void displayAuthorInfo (int authorID) {
+        if(authorID == 0) return;
         try {
             authorDao = getDatabaseHelper().getAuthorDao();
            Log.d(LOG_TAG, "WE got authorDAO");
+
            Author localTempAuthor=authorDao.queryForId(authorID);
-//           tv.setText(localTempAuthor.getId() + "");
            editFirstNameText.setText(localTempAuthor.getFName());
            editLastNameText.setText(localTempAuthor.getLName());
            editDateBornText.setText(String.valueOf(localTempAuthor.getDateBorn()));
@@ -129,7 +117,24 @@ public class AuthorDetailActivity extends AppCompatActivity{
         Log.i(LOG_TAG, "Done with displayAuthorInfo " + System.currentTimeMillis());
     }
 
-    public void addAuthor() {
+    public void updateAuthorInDatabase(int authorID) {
+        try{
+            authorDao = getDatabaseHelper().getAuthorDao();
+            Author author = authorDao.queryForId(authorID);
+            String firstName = editFirstNameText.getText().toString();
+            author.setFName(firstName);
+            String lastName = editLastNameText.getText().toString();
+            author.setLName(lastName);
+            int dateBorn = Integer.parseInt(editDateBornText.getText().toString());
+            author.setDateBorn(dateBorn);
+            authorDao.update(author);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createAuthorInDatabase() {
         try {
             authorDao = getDatabaseHelper().getAuthorDao();
             Log.d(LOG_TAG, "WE got authorDAO");
@@ -137,17 +142,16 @@ public class AuthorDetailActivity extends AppCompatActivity{
             String fName = editFirstNameText.getText().toString();
             String lName = editLastNameText.getText().toString();
             int dBorn = Integer.parseInt(editDateBornText.getText().toString());
-            if(fName.equals("Oscar") && lName.equals("Wilde") && dBorn == 1854) {
-                Author localTempAuthor = new Author(fName, lName, dBorn);
-                authorDao.create(localTempAuthor);
-            }
 
-
+            Author localTempAuthor = new Author(fName, lName, dBorn);
+            authorDao.create(localTempAuthor);
+            authorList = authorDao.queryForAll();
+            Log.d(LOG_TAG, "The author list size is: " + authorList.size());
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Log.i(LOG_TAG, "Done with addAuthor " + System.currentTimeMillis());
+        Log.i(LOG_TAG, "Done with createAuthor " + System.currentTimeMillis());
     }
 
 }

@@ -47,19 +47,18 @@ public class GenreDetailActivity extends AppCompatActivity {
         Intent localIntent = getIntent();
         final int localGenreId = localIntent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
         // write text in edit fields using id passed through intent
-        displayInfoInEditText(localGenreId);
+        displayGenreInfo(localGenreId);
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = editGenreText.getText().toString();
                 if (localGenreId == 0) {
                     Log.d(LOG_TAG, "Genre should be created");
-                    createGenreInDatabase( message);
+                    createGenreInDatabase();
                 }
                 else {
                     Log.d(LOG_TAG, "Genre was selected so it should be updated");
-                    updateGenreInDatabase(localGenreId, message);
+                    updateGenreInDatabase(localGenreId);
                 }
                 finish();
             }
@@ -91,10 +90,11 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
-    private void displayInfoInEditText(int genreId) {
+    private void displayGenreInfo(int genreId) {
         if(genreId == 0) return;
         try{
             genreDao = getDatabaseHelper().getGenreDao();
+            Log.d(LOG_TAG, "WE got genreDAO");
             Genre genre = genreDao.queryForId(genreId);
             editGenreText.setText(genre.getName());
 
@@ -104,10 +104,11 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
-    public void updateGenreInDatabase(int genreId, String genreName) {
+    public void updateGenreInDatabase(int genreId) {
         try{
             genreDao = getDatabaseHelper().getGenreDao();
             Genre genre = genreDao.queryForId(genreId);
+            String genreName = editGenreText.getText().toString();
             genre.setName(genreName);
             genreDao.update(genre);
 
@@ -117,16 +118,17 @@ public class GenreDetailActivity extends AppCompatActivity {
     }
 
 
-    public void createGenreInDatabase( String genreName) {
+    public void createGenreInDatabase() {
         try {
 
             genreDao = getDatabaseHelper().getGenreDao();
             genreList = genreDao.queryForAll();
             Log.d(LOG_TAG, "WE got genreDao");
-                Genre genre = new Genre(genreName);
-                genreDao.create(genre);
-                genreList = genreDao.queryForAll();
-            Log.d(LOG_TAG, "Thr genre list size is: " + genreList.size());
+            String genreName = editGenreText.getText().toString();
+            Genre genre = new Genre(genreName);
+            genreDao.create(genre);
+            genreList = genreDao.queryForAll();
+            Log.d(LOG_TAG, "The genre list size is: " + genreList.size());
 
         } catch (SQLException e) {
             e.printStackTrace();
