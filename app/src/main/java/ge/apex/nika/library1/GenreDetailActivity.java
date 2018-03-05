@@ -21,7 +21,7 @@ public class GenreDetailActivity extends AppCompatActivity {
 
     protected final String LOG_TAG = "GenreDetailActivity";
 
-    // Reference of DatabaseHelper class to access its DAOs and other components pushing a
+    // Reference of DatabaseHelper class to access its DAOs and other components.
     protected DatabaseHelper databaseHelper = null;
 
     // Declaration of DAO to interact with corresponding Genre table

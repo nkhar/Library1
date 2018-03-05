@@ -27,7 +27,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
 
     protected final String LOG_TAG = "AuthorDetailActivity";
 
-    // Reference of DatabaseHelper class to access its DAOs and other components pushing a
+    // Reference of DatabaseHelper class to access its DAOs and other components
     protected DatabaseHelper databaseHelper = null;
 
     // Declaration of DAO to interact with corresponding Author table
@@ -52,20 +52,20 @@ public class AuthorDetailActivity extends AppCompatActivity{
 
         // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
-        final int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
+        final int localAuthorId = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
         // write text in edit fields using id passed through intent
-        displayAuthorInfo(messageID);
+        displayAuthorInfo(localAuthorId);
 
         buttonAddAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(messageID == 0) {
+                if(localAuthorId == 0) {
                     Log.d(LOG_TAG, "Author should be created");
                     createAuthorInDatabase();
                 }
                 else{
                     Log.d(LOG_TAG, "Author was selected so it should be updated");
-                    updateAuthorInDatabase(messageID);
+                    updateAuthorInDatabase(localAuthorId);
                 }
                 finish();
             }
@@ -107,6 +107,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
            Log.d(LOG_TAG, "WE got authorDAO");
 
            Author localTempAuthor=authorDao.queryForId(authorID);
+
            editFirstNameText.setText(localTempAuthor.getFName());
            editLastNameText.setText(localTempAuthor.getLName());
            editDateBornText.setText(String.valueOf(localTempAuthor.getDateBorn()));

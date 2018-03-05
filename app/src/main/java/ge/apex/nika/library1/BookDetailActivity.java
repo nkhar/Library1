@@ -1,13 +1,47 @@
 package ge.apex.nika.library1;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import ge.apex.nika.library1.Data.Author;
+import ge.apex.nika.library1.Data.Book;
+import ge.apex.nika.library1.Data.Genre;
+
 
 public class BookDetailActivity extends AppCompatActivity {
+
+    protected final String LOG_TAG = "BookDetailActivity";
+
+    // Reference of DatabaseHelper class to access its DAOs and other components pushing a
+    protected DatabaseHelper databaseHelper = null;
+
+    // Declaration of DAO to interact with corresponding Book table
+    protected Dao<Book, Integer> bookDao;
+    List<Book> bookList = null;
+
+    protected Dao<Author, Integer> authorDao;
+    List<Author> authorList = null;
+
+    protected Dao<Genre, Integer> genreDao;
+    List<Genre> genreList = null;
+
+    Button buttonAddBook;
+    EditText editBookTitleText;
+    EditText editBookLanguageText;
+    EditText editBookDatePublishedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,14 +50,99 @@ public class BookDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        buttonAddBook = findViewById(R.id.bookAddButton);
+        editBookTitleText = findViewById(R.id.bookTitleEditText);
+        editBookLanguageText = findViewById(R.id.bookLanguageEditText);
+        editBookDatePublishedText = findViewById(R.id.bookDatePublishedEditText);
+
+        // Get the Intent that started this activity and get the book id;
+        Intent intent = getIntent();
+        final int localBookId = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE_ID, 0);
+        // write text in edit fields using id passed through intent
+        displayBookInfo(localBookId);
+
+        buttonAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                if(localBookId == 0) {
+                    Log.d(LOG_TAG, "Book should be created");
+                    createBookInDatabase();
+                }
+                else{
+                    Log.d(LOG_TAG, "Book was selected so it should be updated");
+                    //updateAuthorInDatabase(localBookId);
+                }
+                finish();
+
             }
         });
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+         /*
+         *  You'll need this in your class to release the helper when done.
+		 */
+        if(databaseHelper != null ) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    /**
+     * getDatabaseHelper returns instance of DatabaseHelper class
+     */
+    public DatabaseHelper getDatabaseHelper() {
+        if(databaseHelper == null ) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    private void displayBookInfo(int bookId) {
+        if(bookId == 0) return;
+        try{
+            bookDao = getDatabaseHelper().getBookDao();
+            Log.d(LOG_TAG, "We got bookDao");
+            Book localTempBook = bookDao.queryForId(bookId);
+
+            editBookTitleText.setText(localTempBook.getTitle());
+            editBookLanguageText.setText(localTempBook.getLang());
+            editBookDatePublishedText.setText(String.valueOf(localTempBook.getDate()));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Log.i(LOG_TAG, "Done with displayBookInfo " + System.currentTimeMillis());
+    }
+
+    private void createBookInDatabase() {
+        try{
+            bookDao = getDatabaseHelper().getBookDao();
+            Log.d(LOG_TAG, "We got bookDao");
+            authorDao = getDatabaseHelper().getAuthorDao();
+            genreDao = getDatabaseHelper().getGenreDao();
+            authorList = authorDao.queryForAll();
+            genreList = genreDao.queryForAll();
+
+            Author localAuthor = authorList.get(0);
+            Genre localGenre = genreList.get(0);
+            String title = editBookTitleText.getText().toString();
+            String language = editBookLanguageText.getText().toString();
+            int datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
+
+            Book localTempBook = new Book(title, localAuthor, localGenre, datePublished, language);
+            bookDao.create(localTempBook);
+            bookList = bookDao.queryForAll();
+            Log.d(LOG_TAG, "The book list size is: " + bookList.size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Log.i(LOG_TAG, "Done with createBook " + System.currentTimeMillis());
+
     }
 
 }
