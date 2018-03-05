@@ -1,9 +1,5 @@
 package ge.apex.nika.library1;
 
-/**
- * Created by NATIA on 13/02/2018.
- */
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;

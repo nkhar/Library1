@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Created by NATIA on 13/02/2018.
+ * Created by Nika on 13/02/2018.
  */
 
 @DatabaseTable(tableName = "authors")

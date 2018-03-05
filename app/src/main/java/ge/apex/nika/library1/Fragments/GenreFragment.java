@@ -4,6 +4,7 @@ package ge.apex.nika.library1.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
@@ -42,7 +43,7 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
     protected final String LOG_TAG = "GenreFragment";
 
 
-    private int mColumnCount = 1;
+    private final int mColumnCount = 1;
 
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
@@ -64,7 +65,7 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Log.d(LOG_TAG, "onCreateView method was called");
 
@@ -80,7 +81,7 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
             * so it should be changed to:
             * RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rvGenres);
              */
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rvGenres);
+            RecyclerView recyclerView = view.findViewById(R.id.rvGenres);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -100,7 +101,7 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_genre_fragment);
+        FloatingActionButton fab = view.findViewById(R.id.fab_genre_fragment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

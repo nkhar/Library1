@@ -21,7 +21,7 @@ import ge.apex.nika.library1.Data.Book;
 import ge.apex.nika.library1.Data.Genre;
 
 /**
- * Created by NATIA on 20/02/2018.
+ * Created by Nika on 20/02/2018.
  */
 
 public class AuthorDetailActivity extends AppCompatActivity{
@@ -51,20 +51,20 @@ public class AuthorDetailActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_author);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.author_detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.author_detail_toolbar);
         setSupportActionBar(toolbar);
-        buttonAddAuthor = (Button) findViewById(R.id.authorAddButton);
-        editFirstNameText = (EditText) findViewById(R.id.authorFirstNameEditText);
-        editLastNameText = (EditText) findViewById(R.id.authorLastNameEditText);
-        editDateBornText = (EditText) findViewById(R.id.authorDateBornEditText);
-        textView= (TextView) findViewById(R.id.author_detail_textview);
+        buttonAddAuthor = findViewById(R.id.authorAddButton);
+        editFirstNameText = findViewById(R.id.authorFirstNameEditText);
+        editLastNameText = findViewById(R.id.authorLastNameEditText);
+        editDateBornText = findViewById(R.id.authorDateBornEditText);
+        textView= findViewById(R.id.author_detail_textview);
 
         // Get the Intent that started this activity and extract the author ID
         Intent intent = getIntent();
 
             int messageID = intent.getIntExtra(LibraryActivity.EXTRA_MESSAGE, 0);
             if(messageID != 0) {
-                TextView textView = (TextView) findViewById(R.id.author_detail_textview);
+                TextView textView = findViewById(R.id.author_detail_textview);
                 displayAuthorInfo(messageID, textView);
             }
 
@@ -120,7 +120,7 @@ public class AuthorDetailActivity extends AppCompatActivity{
 //           tv.setText(localTempAuthor.getId() + "");
            editFirstNameText.setText(localTempAuthor.getFName());
            editLastNameText.setText(localTempAuthor.getLName());
-           editDateBornText.setText(localTempAuthor.getDateBorn() + "");
+           editDateBornText.setText(String.valueOf(localTempAuthor.getDateBorn()));
 
         } catch (SQLException e) {
             e.printStackTrace();

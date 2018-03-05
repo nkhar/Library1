@@ -1,13 +1,12 @@
 package ge.apex.nika.library1.Fragments;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import ge.apex.nika.library1.Data.Genre;
 import ge.apex.nika.library1.R;
 
 /**
- * Created by NATIA on 21/02/2018.
+ * Created by Nika on 21/02/2018.
  */
 
 public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreRecyclerViewAdapter.ViewHolder, Genre> {
@@ -27,6 +26,7 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
     }
 
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -56,7 +56,6 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
                     listener.onClick(value);
                 }
             });
-
     }
 
 
@@ -80,8 +79,8 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
             super(itemView);
 
             mView = itemView;
-            mIdTextView = (TextView) itemView.findViewById(R.id.genre_id);
-            mGenreNameTextView = (TextView) itemView.findViewById(R.id.genre_Name);
+            mIdTextView = itemView.findViewById(R.id.genre_id);
+            mGenreNameTextView = itemView.findViewById(R.id.genre_Name);
 
         }
 

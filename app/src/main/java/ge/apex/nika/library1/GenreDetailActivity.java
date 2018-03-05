@@ -2,8 +2,6 @@ package ge.apex.nika.library1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -19,8 +16,6 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import ge.apex.nika.library1.Data.Author;
-import ge.apex.nika.library1.Data.Book;
 import ge.apex.nika.library1.Data.Genre;
 
 public class GenreDetailActivity extends AppCompatActivity {
@@ -42,11 +37,11 @@ public class GenreDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_genre);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.genre_detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.genre_detail_toolbar);
         setSupportActionBar(toolbar);
-        buttonAdd = (Button) findViewById(R.id.genreAddButton);
-        editGenreText = (EditText) findViewById(R.id.genreEditText);
-        textView= (TextView) findViewById(R.id.genre_add_textview);
+        buttonAdd = findViewById(R.id.genreAddButton);
+        editGenreText = findViewById(R.id.genreEditText);
+        textView= findViewById(R.id.genre_add_textview);
 
 
         /*

@@ -1,5 +1,6 @@
 package ge.apex.nika.library1.Fragments;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,11 @@ public  abstract class RecyclerViewListAdapter<T extends RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
-    public abstract T onCreateViewHolder(ViewGroup parent, int viewType);
+    @NonNull
+    public abstract T onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(final T holder, int position) {
+    public void onBindViewHolder(@NonNull final T holder, int position) {
         if(mValues != null)
             onBindViewHolder(holder, mValues.get(position));
         else

@@ -2,6 +2,7 @@ package ge.apex.nika.library1.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -34,7 +35,7 @@ public class BookFragment extends Fragment {
 
     protected final String LOG_TAG = "BookFragment";
 
-    private int mColumnCount = 1;
+    private final int mColumnCount = 1;
 
     private OnListBookFragmentInteractionListener mListener;
 
@@ -69,7 +70,7 @@ public class BookFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         /*
         *

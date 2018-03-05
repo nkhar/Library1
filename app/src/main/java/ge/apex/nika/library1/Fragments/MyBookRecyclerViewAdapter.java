@@ -1,6 +1,7 @@
 package ge.apex.nika.library1.Fragments;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +38,9 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -51,14 +53,14 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         holder.mBook = mBookValues.get(position);
-        holder.mBookIdTextView.setText(mBookValues.get(position).getBookId() + "");
+        holder.mBookIdTextView.setText(String.valueOf(mBookValues.get(position).getBookId()));
         holder.mTitleTextView.setText(mBookValues.get(position).getTitle());
-        holder.mBookAuthorTextView.setText(mBookValues.get(position).getAuthorId().getFName() + " " + mBookValues.get(position).getAuthorId().getLName());
+        holder.mBookAuthorTextView.setText(mBookValues.get(position).getAuthorId().getFName() + mBookValues.get(position).getAuthorId().getLName());
         holder.mBookGenreTextView.setText(mBookValues.get(position).getGenreId().getName());
-        holder.mBookYearPublishedTextView.setText(mBookValues.get(position).getDate()+"");
+        holder.mBookYearPublishedTextView.setText(String.valueOf(mBookValues.get(position).getDate()));
         holder.mBookLanguageTextView.setText(mBookValues.get(position).getLang());
 
 
@@ -120,12 +122,12 @@ public class MyBookRecyclerViewAdapter extends RecyclerView.Adapter<MyBookRecycl
             super(itemView);
 
             mView = itemView;
-            mBookIdTextView = (TextView) itemView.findViewById(R.id.book_id);
-            mTitleTextView = (TextView) itemView.findViewById(R.id.book_title);
-            mBookAuthorTextView = (TextView) itemView.findViewById(R.id.book_author);
-            mBookGenreTextView = (TextView) itemView.findViewById(R.id.book_genre);
-            mBookYearPublishedTextView = (TextView) itemView.findViewById(R.id.book_year_published);
-            mBookLanguageTextView = (TextView) itemView.findViewById(R.id.book_language);
+            mBookIdTextView = itemView.findViewById(R.id.book_id);
+            mTitleTextView = itemView.findViewById(R.id.book_title);
+            mBookAuthorTextView = itemView.findViewById(R.id.book_author);
+            mBookGenreTextView = itemView.findViewById(R.id.book_genre);
+            mBookYearPublishedTextView = itemView.findViewById(R.id.book_year_published);
+            mBookLanguageTextView = itemView.findViewById(R.id.book_language);
         }
 
     }
