@@ -165,6 +165,12 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
 
     @Override
     public void onLongClick(Genre value) {
+        try {
+            getDatabaseHelper().getGenreDao().deleteById(value.getGenreId());
+            adapter.updateList(getDatabaseHelper().getGenreDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }

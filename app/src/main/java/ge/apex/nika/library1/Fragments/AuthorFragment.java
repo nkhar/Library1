@@ -146,6 +146,11 @@ public class AuthorFragment extends Fragment implements ILibObjectCrud<Author> {
 
     @Override
     public void onLongClick(Author value) {
-
+        try {
+            getDatabaseHelper().getAuthorDao().deleteById(value.getId());
+            adapter.updateList(getDatabaseHelper().getAuthorDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

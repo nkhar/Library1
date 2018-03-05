@@ -140,7 +140,12 @@ public class BookFragment extends Fragment implements ILibObjectCrud<Book> {
 
     @Override
     public void onLongClick(Book value) {
-
+        try {
+            getDatabaseHelper().getBookDao().deleteById(value.getBookId());
+            adapter.updateList(getDatabaseHelper().getBookDao().queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

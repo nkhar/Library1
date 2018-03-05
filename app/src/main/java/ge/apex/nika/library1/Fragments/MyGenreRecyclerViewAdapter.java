@@ -56,6 +56,13 @@ public class MyGenreRecyclerViewAdapter extends RecyclerViewListAdapter<MyGenreR
                     listener.onClick(value);
                 }
             });
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener.onLongClick(value);
+                    return true;
+                }
+            });
         }
     }
 

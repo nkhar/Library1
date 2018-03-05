@@ -60,6 +60,13 @@ public class MyBookRecyclerViewAdapter extends RecyclerViewListAdapter<MyBookRec
                     listener.onClick(value);
                 }
             });
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener.onLongClick(value);
+                    return true;
+                }
+            });
         }
 
      /*   holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
