@@ -9,4 +9,9 @@
     <string name="title_activity_genre_detail">Modify Genre Details</string>
     <string name="title_activity_author_detail">Modify Author Details</string>
     <string name="title_activity_book_detail">BookDetailActivity</string>
+    <string name="title_activity_choose_genre">Choose The Genre</string>
+    <string name="title_activity_choose_author">Choose The Author</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

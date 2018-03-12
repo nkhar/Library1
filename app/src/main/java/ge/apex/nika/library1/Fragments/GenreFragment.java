@@ -162,6 +162,7 @@ public class GenreFragment extends Fragment implements ILibObjectCrud<Genre>{
         startActivity(intent);
     }
 
+
     @Override
     public void onLongClick(Genre value) {
         try {

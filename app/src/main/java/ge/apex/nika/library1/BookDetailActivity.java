@@ -25,6 +25,9 @@ public class BookDetailActivity extends AppCompatActivity {
 
     protected final String LOG_TAG = "BookDetailActivity";
 
+    static final int CHOOSE_AUTHOR_REQUEST = 1;
+    static final int CHOOSE_GENRE_REQUEST = 2;
+
     // Reference of DatabaseHelper class to access its DAOs and other components pushing a
     protected DatabaseHelper databaseHelper = null;
 
@@ -39,6 +42,8 @@ public class BookDetailActivity extends AppCompatActivity {
     List<Genre> genreList = null;
 
     Button buttonAddBook;
+    Button buttonChooseGenre;
+    Button buttonChooseAuthor;
     EditText editBookTitleText;
     EditText editBookLanguageText;
     EditText editBookDatePublishedText;
@@ -51,6 +56,8 @@ public class BookDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         buttonAddBook = findViewById(R.id.bookAddButton);
+        buttonChooseAuthor = findViewById(R.id.buttonChooseAuthor);
+        buttonChooseGenre = findViewById(R.id.buttonChooseGenre);
         editBookTitleText = findViewById(R.id.bookTitleEditText);
         editBookLanguageText = findViewById(R.id.bookLanguageEditText);
         editBookDatePublishedText = findViewById(R.id.bookDatePublishedEditText);
@@ -64,16 +71,33 @@ public class BookDetailActivity extends AppCompatActivity {
         buttonAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(localBookId == 0) {
+                if (localBookId == 0) {
                     Log.d(LOG_TAG, "Book should be created");
                     createBookInDatabase();
-                }
-                else{
+                } else {
                     Log.d(LOG_TAG, "Book was selected so it should be updated");
                     //updateAuthorInDatabase(localBookId);
                 }
                 finish();
 
+            }
+        });
+
+        buttonChooseGenre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "Choose Genre Button was clicked, activity should start that displays the fragment with recycler view");
+                Intent intent = new Intent(BookDetailActivity.this, ChooseGenreActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonChooseAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "Choose Author Button was clicked, activity should start that displays the fragment with recycler view");
+                Intent intent = new Intent(BookDetailActivity.this, ChooseAuthorActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -86,7 +110,7 @@ public class BookDetailActivity extends AppCompatActivity {
          /*
          *  You'll need this in your class to release the helper when done.
 		 */
-        if(databaseHelper != null ) {
+        if (databaseHelper != null) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
         }
@@ -96,15 +120,15 @@ public class BookDetailActivity extends AppCompatActivity {
      * getDatabaseHelper returns instance of DatabaseHelper class
      */
     public DatabaseHelper getDatabaseHelper() {
-        if(databaseHelper == null ) {
+        if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
         }
         return databaseHelper;
     }
 
     private void displayBookInfo(int bookId) {
-        if(bookId == 0) return;
-        try{
+        if (bookId == 0) return;
+        try {
             bookDao = getDatabaseHelper().getBookDao();
             Log.d(LOG_TAG, "We got bookDao");
             Book localTempBook = bookDao.queryForId(bookId);
@@ -120,7 +144,7 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     private void createBookInDatabase() {
-        try{
+        try {
             bookDao = getDatabaseHelper().getBookDao();
             Log.d(LOG_TAG, "We got bookDao");
             authorDao = getDatabaseHelper().getAuthorDao();

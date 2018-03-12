@@ -13,14 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import ge.apex.nika.library1.Fragments.AuthorFragment;
 import ge.apex.nika.library1.Fragments.BookFragment;
 import ge.apex.nika.library1.Fragments.GenreFragment;
 
 
 public class LibraryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
-
+        implements NavigationView.OnNavigationItemSelectedListener {
 
 
     protected final String LOG_TAG = "LibraryActivity";
