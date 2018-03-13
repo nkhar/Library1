@@ -36,10 +36,8 @@ public class BookDetailActivity extends AppCompatActivity {
     List<Book> bookList = null;
 
     protected Dao<Author, Integer> authorDao;
-    List<Author> authorList = null;
 
     protected Dao<Genre, Integer> genreDao;
-    List<Genre> genreList = null;
 
     Button buttonAddBook;
     Button buttonChooseGenre;
@@ -166,7 +164,7 @@ public class BookDetailActivity extends AppCompatActivity {
             editBookLanguageText.setText(localTempBook.getLang());
             editBookDatePublishedText.setText(String.valueOf(localTempBook.getDate()));
             buttonChooseGenre.setText(localTempBook.getGenreId().getName());
-            buttonChooseAuthor.setText(localTempBook.getAuthorId().getFName() + " " + localTempBook.getAuthorId().getLName());
+            buttonChooseAuthor.setText(getString(R.string.author_full_name,localTempBook.getAuthorId().getFName(),localTempBook.getAuthorId().getLName()));
 
 
         } catch (SQLException e) {
@@ -210,8 +208,6 @@ public class BookDetailActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "We got bookDao");
             authorDao = getDatabaseHelper().getAuthorDao();
             genreDao = getDatabaseHelper().getGenreDao();
-            authorList = authorDao.queryForAll();
-            genreList = genreDao.queryForAll();
 
             Log.d(LOG_TAG, "The Author id of chosen author is: " + mAuthorId);
             Author localAuthor = authorDao.queryForId(mAuthorId);
@@ -220,7 +216,7 @@ public class BookDetailActivity extends AppCompatActivity {
             String title = editBookTitleText.getText().toString();
             String language = editBookLanguageText.getText().toString();
             int datePublished;
-            if (editBookDatePublishedText.getText().toString().equals("") || editBookDatePublishedText.getText().toString() == null) {
+            if (editBookDatePublishedText.getText().toString().equals("")) {
                 datePublished = 0;
             } else {
                 datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
@@ -265,7 +261,7 @@ public class BookDetailActivity extends AppCompatActivity {
         } else {
             try {
                 authorDao = getDatabaseHelper().getAuthorDao();
-                button.setText(authorDao.queryForId(id).getFName() + " " + authorDao.queryForId(id).getLName());
+                button.setText(getString(R.string.author_full_name, authorDao.queryForId(id).getFName(), authorDao.queryForId(id).getLName()));
 
             } catch (SQLException e) {
                 e.printStackTrace();

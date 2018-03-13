@@ -12,7 +12,8 @@
     <string name="title_activity_choose_genre">Choose The Genre</string>
     <string name="title_activity_choose_author">Choose The Author</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_item_with_id_was_found">No item with such id was found</string>
+
+    <string name="author_full_name">%1$s %2$s</string>
 </resources>
