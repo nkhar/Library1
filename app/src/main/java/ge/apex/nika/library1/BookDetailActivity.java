@@ -119,6 +119,7 @@ public class BookDetailActivity extends AppCompatActivity {
             }
             mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID, 0);
             buttonChooseGenre.setText(String.valueOf(mGenreId));
+            buttonGenreSetText(buttonChooseGenre, mGenreId);
         }
 
         if (requestCode == CHOOSE_AUTHOR_REQUEST) {
@@ -126,9 +127,39 @@ public class BookDetailActivity extends AppCompatActivity {
                 return;
             }
             mAuthorId = data.getIntExtra(ChooseAuthorActivity.EXTRA_AUTHOR_ACTIVITY_AUTHOR_ID, 0);
-            buttonChooseAuthor.setText(String.valueOf(mAuthorId));
+            buttonAuthorSetText(buttonChooseAuthor, mAuthorId);
         }
 
+    }
+
+    private void buttonGenreSetText(Button button, int id) {
+        if(id == 0) {
+            button.setText(R.string.no_item_with_id_was_found);
+        }
+        else {
+            try {
+                genreDao = getDatabaseHelper().getGenreDao();
+                button.setText(genreDao.queryForId(id).getName());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void buttonAuthorSetText(Button button, int id) {
+        if(id == 0) {
+            button.setText(R.string.no_item_with_id_was_found);
+        }
+        else {
+            try {
+                authorDao = getDatabaseHelper().getAuthorDao();
+                button.setText(authorDao.queryForId(id).getFName() + " " + authorDao.queryForId(id).getLName());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -196,7 +227,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
             }
 
-            if (localAuthor == null || localGenre == null || title == null || language == null) {
+            if (localAuthor == null || localGenre == null || title.equals("") || language.equals("")) {
                 return;
             }
 
