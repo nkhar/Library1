@@ -48,6 +48,9 @@ public class BookDetailActivity extends AppCompatActivity {
     EditText editBookLanguageText;
     EditText editBookDatePublishedText;
 
+    int mGenreId;
+    int mAuthorId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +91,7 @@ public class BookDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Choose Genre Button was clicked, activity should start that displays the fragment with recycler view");
                 Intent intent = new Intent(BookDetailActivity.this, ChooseGenreActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,CHOOSE_GENRE_REQUEST);
             }
         });
 
@@ -102,6 +105,21 @@ public class BookDetailActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != RESULT_OK) {
+            return;
+        }
+
+        if(requestCode == CHOOSE_GENRE_REQUEST){
+            if(data == null) {
+                return;
+            }
+            int mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID,0);
+            buttonChooseGenre.setText(String.valueOf(mGenreId));
+        }
     }
 
     @Override
@@ -136,6 +154,10 @@ public class BookDetailActivity extends AppCompatActivity {
             editBookTitleText.setText(localTempBook.getTitle());
             editBookLanguageText.setText(localTempBook.getLang());
             editBookDatePublishedText.setText(String.valueOf(localTempBook.getDate()));
+            buttonChooseGenre.setText(localTempBook.getGenreId().getName());
+            buttonChooseAuthor.setText(localTempBook.getAuthorId().getFName() + " " + localTempBook.getAuthorId().getLName());
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,13 +175,16 @@ public class BookDetailActivity extends AppCompatActivity {
             genreList = genreDao.queryForAll();
 
             Author localAuthor = authorList.get(0);
-            Genre localGenre = genreList.get(0);
+            Log.d(LOG_TAG, "The Genre id of chosen genre is: " + mGenreId);
+            Genre localGenre = genreDao.queryForId(mGenreId);
             String title = editBookTitleText.getText().toString();
             String language = editBookLanguageText.getText().toString();
             int datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
 
             Book localTempBook = new Book(title, localAuthor, localGenre, datePublished, language);
-            bookDao.create(localTempBook);
+            Log.d(LOG_TAG, "The chosen genre is: " + localTempBook.getGenreId().getName());
+
+            //bookDao.create(localTempBook);
             bookList = bookDao.queryForAll();
             Log.d(LOG_TAG, "The book list size is: " + bookList.size());
         } catch (SQLException e) {

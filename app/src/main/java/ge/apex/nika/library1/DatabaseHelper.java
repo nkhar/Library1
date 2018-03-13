@@ -25,7 +25,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for your application -- change to something appropriate for your app
     private static final String DATABASE_NAME = "Library1.db";
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // the DAO object we use to access the various data tables
     private Dao<Author, Integer> authorDao = null;
@@ -88,8 +88,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    /** Create the getDao methods of all database tables to access those from android code.
-     Insert, delete, read, update everything will be happening through DAOs
+    /**
+     * Create the getDao methods of all database tables to access those from android code.
+     * Insert, delete, read, update everything will be happening through DAOs
      */
     public Dao<Author, Integer> getAuthorDao() throws SQLException {
         if (authorDao == null) {
@@ -105,15 +106,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return bookDao;
     }
 
-    public Dao<Genre, Integer> getGenreDao() throws SQLException{
-        if(genreDao == null) {
+    public Dao<Genre, Integer> getGenreDao() throws SQLException {
+        if (genreDao == null) {
             genreDao = getDao(Genre.class);
         }
         return genreDao;
     }
 
-    public Dao<IssuedBook, Integer> getIssuedBookDao() throws SQLException{
-        if(issuedBookDao == null ) {
+    public Dao<IssuedBook, Integer> getIssuedBookDao() throws SQLException {
+        if (issuedBookDao == null) {
             issuedBookDao = getDao(IssuedBook.class);
         }
         return issuedBookDao;

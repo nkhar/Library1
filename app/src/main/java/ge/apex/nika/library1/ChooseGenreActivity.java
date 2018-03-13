@@ -1,5 +1,6 @@
 package ge.apex.nika.library1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,8 @@ public class ChooseGenreActivity extends AppCompatActivity {
 
     protected final String LOG_TAG = "ChooseGenreActivity";
 
+    public static final String EXTRA_GENRE_ACTIVITY_GENRE_ID = "ge.apex.nika.library1.genre_id";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,5 +30,7 @@ public class ChooseGenreActivity extends AppCompatActivity {
         // Insert the fragment by replacing FrameLayout.
         ChooseGenreFragment genreFragment = new ChooseGenreFragment();
         fragmentManager.beginTransaction().replace(R.id.choose_genre_container, genreFragment, "CHOOSE_GENRE_TAG").commit();
+
     }
+
 }
