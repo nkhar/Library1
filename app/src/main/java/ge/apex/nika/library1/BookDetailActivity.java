@@ -79,7 +79,7 @@ public class BookDetailActivity extends AppCompatActivity {
                     createBookInDatabase();
                 } else {
                     Log.d(LOG_TAG, "Book was selected so it should be updated");
-                    //updateAuthorInDatabase(localBookId);
+                    updateBookInDatabase(localBookId);
                 }
                 finish();
 
@@ -132,35 +132,6 @@ public class BookDetailActivity extends AppCompatActivity {
 
     }
 
-    private void buttonGenreSetText(Button button, int id) {
-        if(id == 0) {
-            button.setText(R.string.no_item_with_id_was_found);
-        }
-        else {
-            try {
-                genreDao = getDatabaseHelper().getGenreDao();
-                button.setText(genreDao.queryForId(id).getName());
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void buttonAuthorSetText(Button button, int id) {
-        if(id == 0) {
-            button.setText(R.string.no_item_with_id_was_found);
-        }
-        else {
-            try {
-                authorDao = getDatabaseHelper().getAuthorDao();
-                button.setText(authorDao.queryForId(id).getFName() + " " + authorDao.queryForId(id).getLName());
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -204,6 +175,35 @@ public class BookDetailActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "Done with displayBookInfo " + System.currentTimeMillis());
     }
 
+    private void updateBookInDatabase(int bookID) {
+        try {
+            bookDao = getDatabaseHelper().getBookDao();
+            Book book = bookDao.queryForId(bookID);
+            String title = editBookTitleText.getText().toString();
+            book.setTitle(title);
+            String language = editBookLanguageText.getText().toString();
+            book.setLang(language);
+            int datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
+            book.setDate(datePublished);
+
+            // updating author and genre involves DAOs so it is a bit different.
+            if (mAuthorId != 0) {
+                authorDao = getDatabaseHelper().getAuthorDao();
+                book.setAuthorId(authorDao.queryForId(mAuthorId));
+            }
+            if (mGenreId != 0) {
+                genreDao = getDatabaseHelper().getGenreDao();
+                book.setGenreId(genreDao.queryForId(mGenreId));
+            }
+
+            bookDao.update(book);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void createBookInDatabase() {
         try {
             bookDao = getDatabaseHelper().getBookDao();
@@ -220,10 +220,9 @@ public class BookDetailActivity extends AppCompatActivity {
             String title = editBookTitleText.getText().toString();
             String language = editBookLanguageText.getText().toString();
             int datePublished;
-            if(editBookDatePublishedText.getText().toString().equals("") || editBookDatePublishedText.getText().toString() == null) {
+            if (editBookDatePublishedText.getText().toString().equals("") || editBookDatePublishedText.getText().toString() == null) {
                 datePublished = 0;
-            }
-            else {
+            } else {
                 datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
             }
 
@@ -243,6 +242,35 @@ public class BookDetailActivity extends AppCompatActivity {
         }
         Log.i(LOG_TAG, "Done with createBook " + System.currentTimeMillis());
 
+    }
+
+
+    private void buttonGenreSetText(Button button, int id) {
+        if (id == 0) {
+            button.setText(R.string.no_item_with_id_was_found);
+        } else {
+            try {
+                genreDao = getDatabaseHelper().getGenreDao();
+                button.setText(genreDao.queryForId(id).getName());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void buttonAuthorSetText(Button button, int id) {
+        if (id == 0) {
+            button.setText(R.string.no_item_with_id_was_found);
+        } else {
+            try {
+                authorDao = getDatabaseHelper().getAuthorDao();
+                button.setText(authorDao.queryForId(id).getFName() + " " + authorDao.queryForId(id).getLName());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
