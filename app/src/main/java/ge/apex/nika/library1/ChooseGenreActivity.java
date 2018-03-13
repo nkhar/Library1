@@ -1,14 +1,14 @@
 package ge.apex.nika.library1;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import ge.apex.nika.library1.Fragments.BookFragment;
+
 import ge.apex.nika.library1.Fragments.ChooseGenreFragment;
-import ge.apex.nika.library1.Fragments.GenreFragment;
+
 
 /**
  * Created by Nika on 12/03/2018.

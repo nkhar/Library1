@@ -100,7 +100,7 @@ public class BookDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Choose Author Button was clicked, activity should start that displays the fragment with recycler view");
                 Intent intent = new Intent(BookDetailActivity.this, ChooseAuthorActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, CHOOSE_AUTHOR_REQUEST);
             }
         });
 
@@ -117,9 +117,18 @@ public class BookDetailActivity extends AppCompatActivity {
             if(data == null) {
                 return;
             }
-            int mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID,0);
+            mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID,0);
             buttonChooseGenre.setText(String.valueOf(mGenreId));
         }
+
+        if(requestCode == CHOOSE_AUTHOR_REQUEST) {
+            if(data == null) {
+                return;
+            }
+            mAuthorId = data.getIntExtra(ChooseAuthorActivity.EXTRA_AUTHOR_ACTIVITY_AUTHOR_ID,0);
+            buttonChooseAuthor.setText(String.valueOf(mAuthorId));
+        }
+
     }
 
     @Override
@@ -174,17 +183,23 @@ public class BookDetailActivity extends AppCompatActivity {
             authorList = authorDao.queryForAll();
             genreList = genreDao.queryForAll();
 
-            Author localAuthor = authorList.get(0);
+            Log.d(LOG_TAG, "The Author id of chosen author is: " + mAuthorId);
+            Author localAuthor = authorDao.queryForId(mAuthorId);
             Log.d(LOG_TAG, "The Genre id of chosen genre is: " + mGenreId);
             Genre localGenre = genreDao.queryForId(mGenreId);
             String title = editBookTitleText.getText().toString();
             String language = editBookLanguageText.getText().toString();
             int datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
 
+            if(localAuthor == null || localGenre == null) {
+                return;
+            }
+
             Book localTempBook = new Book(title, localAuthor, localGenre, datePublished, language);
             Log.d(LOG_TAG, "The chosen genre is: " + localTempBook.getGenreId().getName());
+            Log.d(LOG_TAG, "The chosen author is: " + localTempBook.getAuthorId().getFName() + " " + localTempBook.getAuthorId().getLName());
 
-            //bookDao.create(localTempBook);
+            bookDao.create(localTempBook);
             bookList = bookDao.queryForAll();
             Log.d(LOG_TAG, "The book list size is: " + bookList.size());
         } catch (SQLException e) {

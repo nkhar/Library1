@@ -3,18 +3,17 @@ package ge.apex.nika.library1.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
+
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
 
 import java.sql.SQLException;
 
 import ge.apex.nika.library1.ChooseGenreActivity;
 import ge.apex.nika.library1.Data.Genre;
-import ge.apex.nika.library1.R;
+
 
 /**
  * A simple {@link Fragment} subclass.

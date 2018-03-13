@@ -40,7 +40,7 @@ public class MyBookRecyclerViewAdapter extends RecyclerViewListAdapter<MyBookRec
         holder.mBook = value;
         holder.mBookIdTextView.setText(String.valueOf(value.getBookId()));
         holder.mTitleTextView.setText(value.getTitle());
-        holder.mBookAuthorTextView.setText(value.getAuthorId().getFName() + value.getAuthorId().getLName());
+        holder.mBookAuthorTextView.setText(value.getAuthorId().getFName() + " " + value.getAuthorId().getLName());
         holder.mBookGenreTextView.setText(value.getGenreId().getName());
         holder.mBookYearPublishedTextView.setText(String.valueOf(value.getDate()));
         holder.mBookLanguageTextView.setText(value.getLang());
