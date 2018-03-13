@@ -91,7 +91,7 @@ public class BookDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Choose Genre Button was clicked, activity should start that displays the fragment with recycler view");
                 Intent intent = new Intent(BookDetailActivity.this, ChooseGenreActivity.class);
-                startActivityForResult(intent,CHOOSE_GENRE_REQUEST);
+                startActivityForResult(intent, CHOOSE_GENRE_REQUEST);
             }
         });
 
@@ -109,23 +109,23 @@ public class BookDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
 
-        if(requestCode == CHOOSE_GENRE_REQUEST){
-            if(data == null) {
+        if (requestCode == CHOOSE_GENRE_REQUEST) {
+            if (data == null) {
                 return;
             }
-            mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID,0);
+            mGenreId = data.getIntExtra(ChooseGenreActivity.EXTRA_GENRE_ACTIVITY_GENRE_ID, 0);
             buttonChooseGenre.setText(String.valueOf(mGenreId));
         }
 
-        if(requestCode == CHOOSE_AUTHOR_REQUEST) {
-            if(data == null) {
+        if (requestCode == CHOOSE_AUTHOR_REQUEST) {
+            if (data == null) {
                 return;
             }
-            mAuthorId = data.getIntExtra(ChooseAuthorActivity.EXTRA_AUTHOR_ACTIVITY_AUTHOR_ID,0);
+            mAuthorId = data.getIntExtra(ChooseAuthorActivity.EXTRA_AUTHOR_ACTIVITY_AUTHOR_ID, 0);
             buttonChooseAuthor.setText(String.valueOf(mAuthorId));
         }
 
@@ -167,7 +167,6 @@ public class BookDetailActivity extends AppCompatActivity {
             buttonChooseAuthor.setText(localTempBook.getAuthorId().getFName() + " " + localTempBook.getAuthorId().getLName());
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,9 +188,15 @@ public class BookDetailActivity extends AppCompatActivity {
             Genre localGenre = genreDao.queryForId(mGenreId);
             String title = editBookTitleText.getText().toString();
             String language = editBookLanguageText.getText().toString();
-            int datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
+            int datePublished;
+            if(editBookDatePublishedText.getText().toString().equals("") || editBookDatePublishedText.getText().toString() == null) {
+                datePublished = 0;
+            }
+            else {
+                datePublished = Integer.parseInt(editBookDatePublishedText.getText().toString());
+            }
 
-            if(localAuthor == null || localGenre == null) {
+            if (localAuthor == null || localGenre == null || title == null || language == null) {
                 return;
             }
 
